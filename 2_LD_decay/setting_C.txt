@@ -9,24 +9,23 @@
 
 # Numerical parameters
 
-LOCI = 2                    # for 2 loci we have a prediction of decay of LD
-NUMBERofCHROMOSOMES = 1         
-LAMBDA = [0.25, 0.5, 3]        
+LOCI = 1
+NUMBERofCHROMOSOMES = 2     # 2 chromosomes, 1 locus each -> pair of indipendent loci
+LAMBDA = 0
 SELECTIONpressure = 0       # no selection pressure
-BETA = 1                     
+BETA = 1
 DEMEsize = 10000            # small efect of drift
-SEED = 910401              
+SEED = 910401
 
-NUMBERofGENERATIONS = 30  
+NUMBERofGENERATIONS = 30
 
 #output parameters defining the output
 
 NUMBERofSAVES = 30     # output every generation
 # NAMEofOUTPUTfile     # non-defined NAMEofOUTPUTfile means no saves to file (only summary to standard output)
 # TYPEofOUTPUTfile     # parameter is obligatory only if filename is specified
-DELAY = 0              
+DELAY = 0
 
 # World definition
-	
-WORLDdefinition -quick = 'Arena' 1    # world will be one deme only
 
+WORLDdefinition -quick = 'Arena' 1    # world will be one deme only
