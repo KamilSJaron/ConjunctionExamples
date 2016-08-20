@@ -1,17 +1,8 @@
-library('RColorBrewer')
-# REPLACE BY LIBRARY(...)
-for(file in dir('/Volumes/dump/projects/Conjunction/ConjunctionStats/R/', full.names=T)){
-	source(file)
-}
-#library('hzar')
+library(ConjunctionStats)
 
-for(index in 1:5){
-  sim <- ReadSummary(paste0('rotation',index,'.out'))
-  GradTable <- ReadSetting(paste0('setting',index,'.txt'))
-  assign(paste0('rotation',index),FillSetting(sim,GradTable))
-}
-
-GradTable <- rbind(rotation1,rotation2,rotation3,rotation4,rotation5)
+sim <- ReadSummary('rotation.out')
+GradTable <- ReadSetting('setting.txt')
+GradTable <- FillSetting(sim,GradTable)
 
 pdf('width_over_time_wo_selection.pdf')
   plot(GradTable$width_l ~ GradTable$G, pch = 20, ylim = c(0,max(GradTable$width_l, na.rm = T)), xlab = 'generation', ylab = 'cline width')

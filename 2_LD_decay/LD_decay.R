@@ -1,8 +1,5 @@
 library('RColorBrewer')
-# REPLACE BY LIBRARY(...)
-for(file in dir('/Volumes/dump/projects/Conjunction/ConjunctionStats/R/', full.names=T)){
-	source(file)
-}
+library('ConjunctionStats')
 
 # contains 90 saves of three simulations
 ld_sum_loci <- ReadSummary('out_l')

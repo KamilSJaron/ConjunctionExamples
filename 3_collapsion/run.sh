@@ -1,7 +1,5 @@
 #!/bin/bash
 
-for i in `seq 1 5`; do
-  conjunction setting$i.txt > rotation$i.out 2> log$i.err;
-done
+conjunction > rotation.out 2> rotations.err;
 
 Rscript collapsion.R
