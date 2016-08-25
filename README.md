@@ -18,12 +18,12 @@ Every set of simulations is in one folder, which contain:
 
 2. decay of linkage disequllibria given recombination rate of two loci
 3. collapsion of a 1D cline without selection given dispersal
+5. the width of one locus 1D cline given selection and dispersal (Bazykin 1969)
 
 ## to do
 
-1. ?? the rate of increase of gene frequency variance under drift 
+1. ?? the rate of increase of gene frequency variance under drift
 4. ?? the decrease in correlation between gene frequency fluctuations under migration, heterozygote advantage, and drift have to be according the prediction of Malecot (1948)
-5. the width of one locus 1D cline given selection and dispersal (Bazykin 1969)
 6. the shape of a cline given an epistatic selection (original ref)
 
 ## licence

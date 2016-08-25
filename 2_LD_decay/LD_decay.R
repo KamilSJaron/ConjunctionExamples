@@ -2,9 +2,9 @@ library('RColorBrewer')
 library('ConjunctionStats')
 
 # contains 90 saves of three simulations
-ld_sum_loci <- ReadSummary('out_l')
+ld_sum_loci <- ReadSummary('LD_loci.out')
 # contains 30 saves if one simulation
-ld_sum_chrom <- ReadSummary('out_c')
+ld_sum_chrom <- ReadSummary('LD_chrom.out')
 
 # function will be used for easy extraction of one column from list of data frames (summaries)
 getLD <- function(df){

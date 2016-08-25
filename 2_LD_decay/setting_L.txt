@@ -15,7 +15,7 @@ LAMBDA = [0.25, 0.5, 3]
 SELECTIONpressure = 0       # no selection pressure
 BETA = 1
 DEMEsize = 10000            # small efect of drift
-SEED = 910401
+SEED = 910406
 
 NUMBERofGENERATIONS = 30
 
