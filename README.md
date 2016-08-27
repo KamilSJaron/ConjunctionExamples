@@ -25,6 +25,8 @@ Every set of simulations is in one folder, which contain:
 1. ?? the rate of increase of gene frequency variance under drift
 4. ?? the decrease in correlation between gene frequency fluctuations under migration, heterozygote advantage, and drift have to be according the prediction of Malecot (1948)
 6. the shape of a cline given an epistatic selection (original ref)
+7. introgression of blocks though spatial cline
+8. inf inf case
 
 ## licence
 

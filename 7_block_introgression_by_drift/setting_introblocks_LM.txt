@@ -1,0 +1,43 @@
+#################################################
+# TEMPLATE FILE OF PARAMETERS FOR THE SIMULATOR #
+#################################################
+# this file serves as setting for the program Conjunction
+# hosted by GitHub https://github.com/KamilSJaron/Conjunction
+# all parameters are well documented in wiki of the repository
+# https://github.com/KamilSJaron/Conjunction/wiki/setting
+
+# # is the comment symbol, everything after # will be ignored as well as all blank lines.
+# The syntax is "NAMEofPARAMETER = VALUE"
+# Define parameters as vectors for simulations in all defined values
+# Syntax of vectors is [VALUE, VALUE, ...., VALUE]
+# If more variables are defined as vectors, all possible combinations will be simulated
+# range of the reasonable values is in comment after every parameter {min,max}
+# values out of recommended range are allowed
+
+# Numerical parameters
+
+LOCI = 10000                        # integer in {1,10000}
+NUMBERofCHROMOSOMES = 20              # integer in {1,21}
+LAMBDA = 1.53                        # real in {0,5}, recombination
+SELECTIONpressure = 0.42             # real in {0,1}
+BETA = 1                             # real in {0.0625,16}, epistatic function
+DEMEsize = [16, 32, 64]                     # integer in {8,8192}, only multiplies of 4
+NUMBERofGENERATIONS = 1000             # integer in {1,10000}
+
+REPLICATES = 1                       # int {1,10}
+
+#output parameters defining the output
+
+NUMBERofSAVES = 5                    # integer smaller than number of generations
+NAMEofOUTPUTfile = introgressing_blocks
+TYPEofOUTPUTfile = blocks
+DELAY = 0                           # integer smaller than number of generations
+
+# World definition
+
+WORLDdefinition -quick = 'LowMigrationBazykin' 1
+# Predefined worlds: {'HybridZone';LowMigrationBazykin';'InfInf';'Arena'}
+
+# WORLDdefinition -standard = <dimension> <left_right_border> <columns> <up_down_border> <rows>
+# WORLDdefinition -standard = 2 'infinite' 8 'wrapping' 8
+# Border types: {'extending','wrapping','infinite','reflexive'}
