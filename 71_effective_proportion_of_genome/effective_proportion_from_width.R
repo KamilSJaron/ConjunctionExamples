@@ -11,22 +11,26 @@ sim_HM <- ReadSummary('introblocks_HM.out')
 GradTable_HM <- FillSetting(sim_HM,GradTable_HM)
 
 # seems that in this case the effect of Deme size to deme width is negligible
-#PlotWidths(GradTable_HM[GradTable_HM$s == 0.4 & GradTable_HM$b == 1,],
-#           'G', 'D', 'bottomright', pal = c('green', 'purple'), ylim = c(1,20))
-#PlotWidths(GradTable_LM[GradTable_LM$s == 0.4 & GradTable_LM$b == 1,],
-#           'G', 'D', 'topleft', add = T)
+PlotWidths(GradTable_HM[GradTable_HM$s == 0.4 & GradTable_HM$b == 1,],
+           'G', 'D', 'bottomright', pal = c('green', 'purple'), ylim = c(1,20))
 
 # same here
-#PlotWidths(GradTable_LM[GradTable_LM$G == 400 & GradTable_LM$b == 1,],
-#           's', 'D')
+PlotWidths(GradTable_LM[GradTable_LM$G == 400 & GradTable_LM$b == 1,],
+           's', 'D')
 
 # effective selection acting over the whole genome (s* in Barton 83)
-GradTable_HM$Ss <- 8 * 0.5 / GradTable_HM$width_l^2
-GradTable_LM$Ss <- 8 * 0.25 / GradTable_LM$width_l^2
+# GradTable_HM$Ss <- 8 * 0.5 / GradTable_HM$width_l^2
+# GradTable_LM$Ss <- 8 * 0.25 / GradTable_LM$width_l^2
 
-# effective proportion of genome acting together as a fraction of effective selection in total selection
-GradTable_HM$sss <- GradTable_HM$Ss / GradTable_HM$s
-GradTable_LM$sss <- GradTable_LM$Ss / GradTable_LM$s
+getMinMeanF <- function(intable){ return(min(intable$meanf)) }
+# unlist(lapply(sim_HM, getMinMeanF))
+# conservative guess
+
+GradTable_HM$effective_s <- 1 - (1 - GradTable_HM$s) / unlist(lapply(sim_HM, getMinMeanF))
+GradTable_HM$sss <- GradTable_HM$effective_s / GradTable_HM$s
+
+GradTable_LM$effective_s <- 1 - (1 - GradTable_LM$s) / unlist(lapply(sim_LM, getMinMeanF))
+GradTable_LM$sss <- GradTable_LM$effective_s / GradTable_LM$s
 
 # the test of consistency of dispersal 0.25 and 0.5, when meaningless values are discarded
 t.test(GradTable_HM$sss[which(GradTable_HM$sss < 1 & GradTable_LM$sss < 1)] /
@@ -34,12 +38,12 @@ t.test(GradTable_HM$sss[which(GradTable_HM$sss < 1 & GradTable_LM$sss < 1)] /
        mu = 1)
 
 # obviously wrong for strong selection
-GradTable_HM[which(GradTable_HM$sss > 1),]
+# GradTable_HM[which(GradTable_HM$sss > 1),]
 
 # cut dataset only for meaningful values of sss
-selection <- which(GradTable_HM$sss < 1 & GradTable_LM$sss < 1)
-GradTable_HM <- GradTable_HM[selection,]
-GradTable_LM <- GradTable_LM[selection,]
+# selection <- which(GradTable_HM$sss < 1 & GradTable_LM$sss < 1)
+# GradTable_HM <- GradTable_HM[selection,]
+# GradTable_LM <- GradTable_LM[selection,]
 
 trendline <- lm(GradTable_HM$sss ~ GradTable_HM$s)
 pdf('proportion_of_genome_vs_selection.pdf')
