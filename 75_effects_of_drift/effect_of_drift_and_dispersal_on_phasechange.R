@@ -1,0 +1,98 @@
+library(ConjunctionStats)
+library(RColorBrewer)
+
+# move to permanent functions
+add.alpha <- function(col, alpha=1){
+  if(missing(col))
+    stop("Please provide a vector of colours.")
+  apply(sapply(col, col2rgb)/255, 2,
+                     function(x)
+                       rgb(x[1], x[2], x[3], alpha=alpha))
+}
+
+source('filling_functions.R')
+# sigma^2 = 0.5, D=32
+multilocus_HM_D32 <- read.table('multilocus_D32_HM.tsv')
+onelocus_HM_D32 <- read.table('one_locus_D32_HM.tsv')
+#multilocus_HM_D32 <- getReplicateAverages(multilocus_HM_D32)
+onelocus_HM_D32 <- getReplicateAverages(onelocus_HM_D32)
+multilocus_HM_D32 <- fillClosestS(multilocus_HM_D32, onelocus_HM_D32)
+
+# sigma^2 = 0.25, D=32
+multilocus_LM_D32 <- read.table('multilocus_D32_LM.tsv')
+onelocus_LM_D32 <- read.table('one_locus_D32_LM.tsv')
+#multilocus_LM_D32 <- getReplicateAverages(multilocus_LM_D32)
+onelocus_LM_D32 <- getReplicateAverages(onelocus_LM_D32)
+multilocus_LM_D32 <- fillClosestS(multilocus_LM_D32, onelocus_LM_D32)
+
+# sigma^2 = 0.5, D=16
+multilocus_HM_D16 <- read.table('../74_one_locus_widths/many_loci_widths.tsv')
+onelocus_HM_D16 <- read.table('../74_one_locus_widths/one_locus_widths.tsv')
+#multilocus_HM_D16 <- getReplicateAverages(multilocus_HM_D16)
+onelocus_HM_D16 <- getReplicateAverages(onelocus_HM_D16)
+multilocus_HM_D16 <- fillClosestS(multilocus_HM_D16, onelocus_HM_D16)
+
+multilocus_HM_D32$D <- 32
+multilocus_LM_D32$D <- 32
+multilocus_HM_D16$D <- 16
+
+multilocus_HM_D32$dispersal <- 0.5
+multilocus_LM_D32$dispersal <- 0.25
+multilocus_HM_D16$dispersal <- 0.5
+
+multilocus_HM_D32$sss <- multilocus_HM_D32$ss / multilocus_HM_D32$s
+multilocus_LM_D32$sss <- multilocus_LM_D32$ss / multilocus_LM_D32$s
+multilocus_HM_D16$sss <- multilocus_HM_D16$ss / multilocus_HM_D16$s
+
+GradTable <- rbind(multilocus_HM_D32, multilocus_LM_D32, multilocus_HM_D16)
+GradTable$sss <- GradTable$sss + rnorm(nrow(GradTable), 0, 0.005)
+GradTable$s <- GradTable$s + rnorm(nrow(GradTable), 0, 0.007)
+
+pdf('sss_vs_sel_beta.pdf')
+  pal <- brewer.pal(4,'Spectral')[-3]
+  pal <- c(add.alpha(pal[1], 0.35), add.alpha(pal[2], 0.65), add.alpha(pal[3], 0.45))
+  PlotStat(GradTable, stat = 'sss', par1 = 's', par2 = 'b',
+           legend_position = 'bottomright', pal = pal, add = F,
+           xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
+dev.off()
+
+LMcol <- rgb(0.1,0.5,0.5, 0.75)
+HMcol <- rgb(0.5,0.5,0.1, 0.75)
+pdf('sss_vs_sel_dispersal.pdf')
+  PlotStat(GradTable, stat = 'sss', par1 = 's', par2 = 'dispersal',
+           legend_position = 'bottomright', pal = c(HMcol, LMcol), add = F,
+           xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
+dev.off()
+
+pdf('sss_vs_dispersal.pdf')
+  hist(multilocus_HM_D32$sss[multilocus_HM_D32$s == 0.65], col = HMcol,
+      breaks = 10, main = paste('S* / s ~',expression(sigma^2), 'for s = 0.65'),
+      xlim = c(0, 1.6), xlab = 'sss')
+  hist(multilocus_LM_D32$sss[multilocus_LM_D32$s == 0.65], col = LMcol,
+      breaks = 20, add = T)
+  points(mean(multilocus_HM_D32$sss[multilocus_HM_D32$s == 0.65]), -1,
+         col = HMcol, pch = 15)
+  points(mean(multilocus_LM_D32$sss[multilocus_LM_D32$s == 0.65]), -1,
+         col = LMcol, pch = 15)
+  legend('topright', c('0.5', '0.25', 'overlap', 'mean'), title = expression(sigma^2), pch = c(rep(20,3),15), col = c(HMcol, LMcol, rgb(0.2,0.4,0.2), 'black'))
+dev.off()
+
+D16col <- rgb(0.1,0.1,0.5, 0.75)
+D32col <- rgb(0.5,0.1,0.1, 0.75)
+pdf('sss_vs_sel_demesize.pdf')
+PlotStat(GradTable, stat = 'sss', par1 = 's', par2 = 'D',
+        legend_position = 'bottomright', pal = c(D16col, D32col), add = F,
+        xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
+dev.off()
+
+pdf('sss_vs_demesize.pdf')
+  hist(multilocus_HM_D16$sss[multilocus_HM_D16$s == 0.65], col = D16col,
+       breaks = 20, main = 'S* / s ~ D, for s = 0.65', xlab = 'sss')
+  hist(multilocus_HM_D32$sss[multilocus_HM_D32$s == 0.65], col = D32col,
+       breaks = 10, add = T)
+  points(mean(multilocus_HM_D16$sss[multilocus_HM_D16$s == 0.65]), -1,
+         col = D16col, pch = 15)
+  points(mean(multilocus_HM_D32$sss[multilocus_HM_D32$s == 0.65]), -1,
+         col = D32col, pch = 15)
+  legend('topright', c('16', '32', 'overlap', 'mean'), pch = c(rep(20,3),15), col = c(D16col, D32col, rgb(0.6,0.2,0.6), 'black'))
+dev.off()
