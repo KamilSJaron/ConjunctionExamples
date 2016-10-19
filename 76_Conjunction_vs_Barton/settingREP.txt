@@ -1,0 +1,20 @@
+#################################################################
+# WIDTH OF CLINE AS A FUNCTION OF SELECTION FOR GIVEN DISPERSAL #
+#################################################################
+
+LOCI = [100, 10, 2, 1]  
+NUMBERofCHROMOSOMES = 1         
+LAMBDA = 0.2               # irrelevant parameter for one locus system
+SELECTIONpressure = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8]  # width co
+BETA = 1                         # irrelevant parameter for one locus system
+DEMEsize = 512               # demesize just have to bu sufficient to supress storng effect of genetic drift
+SEED = 161028                  
+NUMBERofGENERATIONS = 500        
+REPLICATES = 10
+
+NUMBERofSAVES = 5           # width of a cline can be estimated from mean HI of demes which is printed on standard output
+
+
+# World definition
+
+WORLDdefinition -quick = 'HybridZone' 1 

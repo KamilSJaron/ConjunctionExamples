@@ -1,4 +1,4 @@
-# One locus widths under fixed effect of drift
+# Cline widths under fixed effect of drift
 
 So, we know that we do not have reliable estimate of cline widths under drift,
 or that the method we are using for estimation of width is not appropriate for
@@ -6,7 +6,7 @@ wide clines.
 
 ![Code used for analysis](one_locus_drift_widths.R)
 
-## one locus simulation.
+## one locus simulation
 
 Well, we do not have the theory, so let's make some... Using ![setting](one_locus_setting.txt)
 we simulate a width of one locus clines with fixed drift (deme size is 16).
@@ -29,7 +29,7 @@ For visualisation purposes, selection and beta was recalculated to integral of
 as `1 - (4^beta * selection * gamma(beta + 1)^2) / (gamma(2 * beta + 2))`, where
 `gamma` is a Gamma function. Colour code shows a generation of a measurement, ![Fig 2](multilocus_widths_vs_AUFC_and_generation.pdf).
 
-## Effective proportion of genome acting together
+## effective proportion of genome acting together
 
 So we simulated widths of multilocus clines under several conditions,
 now we can find selections needed to generate those widths in one locus clines
@@ -44,3 +44,4 @@ and multilocus clines, which I tried to minimize by using 5 replicates and all
 time points).
 
 I should probably simulate also some values exactly on the edge
+3. [Pre assembly QC](#3_preassembly_qc)

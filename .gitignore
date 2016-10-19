@@ -1,3 +1,5 @@
 *.tsv
 *.out
 *.err
+*.png
+*.pdf
