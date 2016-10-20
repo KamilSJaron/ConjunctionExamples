@@ -1,11 +1,11 @@
 library(ConjunctionStats)
 library(RColorBrewer)
 
-GradTable_L1 <- ReadSetting('one_locus_setting.txt')
-sim_L1 <- ReadSummary('one_locus_widths.out')
-GradTable_L1 <- FillSettingByHZAR(sim_L1,GradTable_L1)
-write.table(GradTable_L1, 'one_locus_widths.tsv')
-# GradTable_L1 <- read.table('one_locus_widths.tsv')
+#GradTable_L1 <- ReadSetting('one_locus_setting.txt')
+#sim_L1 <- ReadSummary('one_locus_widths.out')
+#GradTable_L1 <- FillSettingByHZAR(sim_L1,GradTable_L1)
+#write.table(GradTable_L1, 'one_locus_widths.tsv')
+GradTable_L1 <- read.table('one_locus_widths.tsv')
 
 #GradTable_L1 <- GradTable_L1[GradTable_L1$G == 1000,]
 
@@ -29,14 +29,15 @@ for(sel in unique(GradTable_L1$s)){
 }
 dev.off()
 
-GradTable <- ReadSetting('many_loci_setting.txt')
-sim <- ReadSummary('many_loci_widths.out')
-GradTable <- FillSettingByHZAR(sim,GradTable)
+# GradTable <- ReadSetting('many_loci_setting.txt')
+# sim <- ReadSummary('many_loci_widths.out')
+# GradTable <- FillSettingByHZAR(sim,GradTable)
 # write.table(GradTable, 'many_loci_widths.tsv')
-# GradTable <- read.table('many_loci_widths.tsv')
+GradTable <- rbind(read.table('many_loci_widths.tsv'), read.table('multilocus.tsv'))
 # GradTable <- GradTable[GradTable$G == 1000,]
 
 GradTable$AUFC <- getAUFC(GradTable$s, GradTable$b)
+
 pal <- brewer.pal(10,'RdYlBu')
 pdf('multilocus_widths_vs_AUFC_and_generation.pdf')
   PlotStat(GradTable, stat = 'width_H', par1 = 'AUFC', par2 = 'G',
