@@ -4,6 +4,7 @@ library(RColorBrewer)
 # move to permanent functions
 source('../scripts/add_alpha.R')
 source('filling_functions.R')
+source('../scripts/PlotAverages.R')
 # sigma^2 = 0.5, D=32
 multilocus_HM_D32 <- read.table('multilocus_D32_HM.tsv')
 onelocus_HM_D32 <- read.table('one_locus_D32_HM.tsv')
@@ -39,22 +40,26 @@ multilocus_HM_D16$sss <- multilocus_HM_D16$ss / multilocus_HM_D16$s
 
 GradTable <- rbind(multilocus_HM_D32, multilocus_LM_D32, multilocus_HM_D16)
 GradTable$sss <- GradTable$sss + rnorm(nrow(GradTable), 0, 0.005)
-GradTable$s <- GradTable$s + rnorm(nrow(GradTable), 0, 0.007)
+GradTable$s_norm <- GradTable$s + rnorm(nrow(GradTable), 0, 0.007)
 
 pdf('sss_vs_sel_beta.pdf')
   pal <- brewer.pal(4,'Spectral')[-3]
   pal <- c(add.alpha(pal[1], 0.35), add.alpha(pal[2], 0.65), add.alpha(pal[3], 0.45))
-  PlotStat(GradTable, stat = 'sss', par1 = 's', par2 = 'b',
+  PlotStat(GradTable, stat = 'sss', par1 = 's_norm', par2 = 'b',
            legend_position = 'bottomright', pal = pal, add = F,
            xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
+  pal <- brewer.pal(4,'Spectral')[-3]
+  PlotAverages(GradTable, stat = 'sss', par1 = 's', par2 = 'b', pal = pal)
 dev.off()
 
 LMcol <- rgb(0.1,0.5,0.5, 0.75)
 HMcol <- rgb(0.5,0.5,0.1, 0.75)
 pdf('sss_vs_sel_dispersal.pdf')
-  PlotStat(GradTable, stat = 'sss', par1 = 's', par2 = 'dispersal',
+  PlotStat(GradTable, stat = 'sss', par1 = 's_norm', par2 = 'dispersal',
            legend_position = 'bottomright', pal = c(HMcol, LMcol), add = F,
            xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
+  PlotAverages(GradTable, stat = 'sss', par1 = 's', par2 = 'dispersal',
+               pal = c(rgb(0.1,0.5,0.5), rgb(0.5,0.5,0.1)))
 dev.off()
 
 pdf('sss_vs_dispersal.pdf')
@@ -73,9 +78,11 @@ dev.off()
 D16col <- rgb(0.1,0.1,0.5, 0.75)
 D32col <- rgb(0.5,0.1,0.1, 0.75)
 pdf('sss_vs_sel_demesize.pdf')
-PlotStat(GradTable, stat = 'sss', par1 = 's', par2 = 'D',
+PlotStat(GradTable, stat = 'sss', par1 = 's_norm', par2 = 'D',
         legend_position = 'bottomright', pal = c(D16col, D32col), add = F,
         xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
+PlotAverages(GradTable, stat = 'sss', par1 = 's', par2 = 'D',
+             pal = c(rgb(0.1,0.1,0.5), rgb(0.5,0.1,0.1)))
 dev.off()
 
 pdf('sss_vs_demesize.pdf')

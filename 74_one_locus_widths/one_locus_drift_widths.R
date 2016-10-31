@@ -71,9 +71,15 @@ pdf('proportion_of_genome_vs_selection.pdf')
            legend_position = 'bottomright', pal = pal, xlab = 's* / S')
 dev.off()
 
-#GradTable$AUFC <- getAUFC(GradTable$s, GradTable$b)
+GradTable$ss <- NA
+for(l in 1:nrow(GradTable)){
+  ss <- GradTable_L1_means$s[which.min(abs(GradTable_L1_means$L1_width_H - GradTable$width_H[l]))]
+  GradTable$ss[l] <- ss
+}
+GradTable$sss <- GradTable$ss / GradTable$s
+GradTable$AUFC <- getAUFC(GradTable$s, GradTable$b)
 
 #pdf('sss_agains_1L_equivalent.pdf')
-#PlotStat(GradTable, stat = 'sss', par1 = 'AUFC', par2 = 'b',
-#         legend_position = 'topright', pal = pal)
+PlotStat(GradTable, stat = 'sss', par1 = 'AUFC', par2 = 'b',
+         legend_position = 'topright', pal = pal)
 #dev.off()

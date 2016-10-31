@@ -76,31 +76,27 @@ pdf('propotion_of_selection_vs_selection.pdf')
   par1 = 's', par2 = 'b', 'topleft', pal = pal)
 dev.off()
 
-GradTable_old <- read.table('old_width_estimates.tsv')
-GradTable_old <- GradTable_old[GradTable_old$D == 32,]
-colnames(GradTable_old)[8] <- "width_old_H"
-GradTable_old <- GradTable_old[,c(-9,-10,-11)]
-GradTable_new <- read.table('width_estimates.tsv')
+GradTable <- read.table('width_estimates.tsv')
 
 
 source('../75_effects_of_drift/filling_functions.R')
 onelocus_HM_D32 <- read.table('../75_effects_of_drift/one_locus_D32_LM.tsv')
 onelocus_HM_D32 <- getReplicateAverages(onelocus_HM_D32)
-GradTable_new <- fillClosestS(GradTable_new, onelocus_HM_D32)
+GradTable <- fillClosestS(GradTable, onelocus_HM_D32)
 
-GradTable_new$sss <- GradTable_new$ss / GradTable_new$s
-GradTable_new$sss <- GradTable_new$sss + rnorm(nrow(GradTable_new), 0, 0.005)
-GradTable_new$s <- GradTable_new$s + rnorm(nrow(GradTable_new), 0, 0.007)
+GradTable$sss <- GradTable$ss / GradTable$s
+GradTable$sss <- GradTable$sss + rnorm(nrow(GradTable), 0, 0.005)
+GradTable$s <- GradTable$s + rnorm(nrow(GradTable), 0, 0.007)
 
 source('../scripts/add_alpha.R')
 
 pdf('sss_vs_sel_beta.pdf')
-  nbetas <- length(unique(GradTable_new$b))
+  nbetas <- length(unique(GradTable$b))
   pal <- add.alpha(brewer.pal(nbetas,'Spectral')[1], 0.65)
   for(i in 2:nbetas){
       pal <- c(pal, add.alpha(brewer.pal(nbetas,'Spectral')[i], 0.65))
   }
-  PlotStat(GradTable_new, stat = 'sss', par1 = 's', par2 = 'b',
+  PlotStat(GradTable, stat = 'sss', par1 = 's', par2 = 'b',
            legend_position = 'bottomright', pal = pal, add = F,
            xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
 dev.off()
