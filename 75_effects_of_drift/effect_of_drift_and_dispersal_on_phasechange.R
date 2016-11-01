@@ -1,30 +1,26 @@
 library(ConjunctionStats)
 library(RColorBrewer)
 
-# move to permanent functions
-source('../scripts/add_alpha.R')
-source('filling_functions.R')
-source('../scripts/PlotAverages.R')
 # sigma^2 = 0.5, D=32
 multilocus_HM_D32 <- read.table('multilocus_D32_HM.tsv')
 onelocus_HM_D32 <- read.table('one_locus_D32_HM.tsv')
-#multilocus_HM_D32 <- getReplicateAverages(multilocus_HM_D32)
-onelocus_HM_D32 <- getReplicateAverages(onelocus_HM_D32)
-multilocus_HM_D32 <- fillClosestS(multilocus_HM_D32, onelocus_HM_D32)
+#multilocus_HM_D32 <- GetReplicateAverages(multilocus_HM_D32)
+onelocus_HM_D32 <- GetReplicateAverages(onelocus_HM_D32)
+multilocus_HM_D32 <- FillClosestS(multilocus_HM_D32, onelocus_HM_D32)
 
 # sigma^2 = 0.25, D=32
 multilocus_LM_D32 <- read.table('multilocus_D32_LM.tsv')
 onelocus_LM_D32 <- read.table('one_locus_D32_LM.tsv')
-#multilocus_LM_D32 <- getReplicateAverages(multilocus_LM_D32)
-onelocus_LM_D32 <- getReplicateAverages(onelocus_LM_D32)
-multilocus_LM_D32 <- fillClosestS(multilocus_LM_D32, onelocus_LM_D32)
+#multilocus_LM_D32 <- GetReplicateAverages(multilocus_LM_D32)
+onelocus_LM_D32 <- GetReplicateAverages(onelocus_LM_D32)
+multilocus_LM_D32 <- FillClosestS(multilocus_LM_D32, onelocus_LM_D32)
 
 # sigma^2 = 0.5, D=16
 multilocus_HM_D16 <- read.table('../74_one_locus_widths/multilocus.tsv')
 onelocus_HM_D16 <- read.table('../74_one_locus_widths/one_locus_widths.tsv')
-#multilocus_HM_D16 <- getReplicateAverages(multilocus_HM_D16)
-onelocus_HM_D16 <- getReplicateAverages(onelocus_HM_D16)
-multilocus_HM_D16 <- fillClosestS(multilocus_HM_D16, onelocus_HM_D16)
+#multilocus_HM_D16 <- GetReplicateAverages(multilocus_HM_D16)
+onelocus_HM_D16 <- GetReplicateAverages(onelocus_HM_D16)
+multilocus_HM_D16 <- FillClosestS(multilocus_HM_D16, onelocus_HM_D16)
 
 multilocus_HM_D32$D <- 32
 multilocus_LM_D32$D <- 32
@@ -44,7 +40,7 @@ GradTable$s_norm <- GradTable$s + rnorm(nrow(GradTable), 0, 0.007)
 
 pdf('sss_vs_sel_beta.pdf')
   pal <- brewer.pal(4,'Spectral')[-3]
-  pal <- c(add.alpha(pal[1], 0.35), add.alpha(pal[2], 0.65), add.alpha(pal[3], 0.45))
+  pal <- c(adjustcolor(pal[1], 0.35), adjustcolor(pal[2], 0.65), adjustcolor(pal[3], 0.45))
   PlotStat(GradTable, stat = 'sss', par1 = 's_norm', par2 = 'b',
            legend_position = 'bottomright', pal = pal, add = F,
            xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
