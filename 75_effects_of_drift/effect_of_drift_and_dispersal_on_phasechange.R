@@ -121,3 +121,55 @@ plot(selelctions[AUFCs_chosen] ~ betas[AUFCs_chosen], pch = 20, cex = 0.01)
 for(selection in seq(0.62, 0.9, by = 0.04)){
   print(median(betas[AUFCs_chosen][round(selelctions[AUFCs_chosen], 3) == round(selection,3)][-1]))
 }
+
+
+multilocus_HM_D64 <- read.table('setting_D64_HM.tsv')
+onelocus_HM_D64 <- read.table('setting_onelocus_D64.tsv')
+#multilocus_HM_D16 <- GetReplicateAverages(multilocus_HM_D16)
+onelocus_HM_D64 <- GetReplicateAverages(onelocus_HM_D64)
+multilocus_HM_D64 <- FillClosestS(multilocus_HM_D64, onelocus_HM_D64)
+
+multilocus_HM_D128 <- read.table('setting_D128_HM.tsv')
+onelocus_HM_D128 <- read.table('setting_onelocus_D128.tsv')
+#multilocus_HM_D16 <- GetReplicateAverages(multilocus_HM_D16)
+onelocus_HM_D128 <- GetReplicateAverages(onelocus_HM_D128)
+multilocus_HM_D128 <- FillClosestS(multilocus_HM_D128, onelocus_HM_D128)
+
+multilocus_HM_D64$D <- 64
+multilocus_HM_D128$D <- 128
+
+multilocus_HM_D64$dispersal <- 64
+multilocus_HM_D128$dispersal <- 128
+
+multilocus_HM_D64$sss <- multilocus_HM_D64$ss / multilocus_HM_D64$s
+multilocus_HM_D128$sss <- multilocus_HM_D128$ss / multilocus_HM_D128$s
+
+GradTable <- rbind(multilocus_HM_D32, multilocus_LM_D32, multilocus_HM_D16, multilocus_HM_D64, multilocus_HM_D128)
+GradTable$sss <- (GradTable$ss / GradTable$s) + rnorm(nrow(GradTable), 0, 0.007)
+GradTable$s_norm <- GradTable$s + rnorm(nrow(GradTable), 0, 0.007)
+
+pdf('sss_vs_sel_demesize.pdf')
+pal <- adjustcolor(brewer.pal(4,'RdYlBu'), 0.3)
+#GradTable <- GradTable[GradTable$G == 500,]
+PlotStat(GradTable, stat = 'sss', par1 = 's_norm', par2 = 'D',
+        legend_position = 'topleft', pal = pal, add = F,
+        xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.007)')
+pal <- brewer.pal(4,'RdYlBu')
+PlotAverages(GradTable, stat = 'sss', par1 = 's', par2 = 'D',
+             pal = pal)
+dev.off()
+
+GradTable$AUFC <- getAUFC(GradTable$s, GradTable$b +
+                  rnorm(nrow(GradTable), 0, 0.008))
+
+pdf('sss_vs_AUFC_demesize.pdf')
+pal <- adjustcolor(brewer.pal(4,'RdYlBu'), 0.3)
+#GradTable <- GradTable[GradTable$G == 500,]
+PlotStat(GradTable, stat = 'sss', par1 = 'AUFC', par2 = 'D',
+        legend_position = 'topright', pal = pal, add = F,
+        xlab = 'AUFC + N(0,0.008)', ylab = '(s* / S) + N(0,0.007)')
+pal <- brewer.pal(4,'RdYlBu')
+GradTable$AUFC <- getAUFC(GradTable$s, GradTable$b)
+PlotAverages(GradTable, stat = 'sss', par1 = 'AUFC', par2 = 'D',
+             pal = pal)
+dev.off()
