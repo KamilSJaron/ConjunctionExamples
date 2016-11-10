@@ -1,3 +1,5 @@
+library(ConjunctionStats)
+
 GradTable <- read.table('filled_drift_GradTable.tsv')
 
 sim_D32 <- ReadSummary('multilocus_HM.out')

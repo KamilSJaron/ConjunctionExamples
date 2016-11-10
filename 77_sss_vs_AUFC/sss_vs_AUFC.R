@@ -52,3 +52,16 @@ pdf('sss_vs_AUFC_beta.pdf')
   legend('topright', col = pal, legend = unique(GradTable[,'b']),
          title = expression(beta), pch = 20)
 dev.off()
+
+library(ggplot2)
+
+pdf('width_distributions_vs_s.pdf')
+  GradTable_b3 <- GradTable[GradTable$b == unique(GradTable$b)[3],]
+  GradTable_b3$s <- as.factor(GradTable_b3$s)
+  hist_cut <- ggplot(GradTable_b3, aes(x=width_H, fill=s))
+  hist_cut + geom_density(alpha = 0.4)
+dev.off()
+
+# GradTable$sb <- factor(paste0('s',GradTable$s,'b',GradTable$b))
+# hist_cut <- ggplot(GradTable, aes(x=width_H, fill=sb))
+# hist_cut + geom_density(alpha = 0.2)
