@@ -37,16 +37,18 @@ onelocus_HM_D256 <- read.table('setting_onelocus_D256.tsv')
 onelocus_HM_D256 <- GetReplicateAverages(onelocus_HM_D256, filter = 1)
 multilocus_HM_D256 <- FillClosestS(multilocus_HM_D256, onelocus_HM_D256)
 
-multilocus_HM_D16$D <- 16
-multilocus_LM_D32$D <- 32
-multilocus_HM_D32$D <- 32
-multilocus_HM_D64$D <- 64
-multilocus_HM_D128$D <- 128
-multilocus_HM_D256$D <- 256
+# multilocus_HM_D16$D <- 16
+# multilocus_LM_D32$D <- 32
+# multilocus_HM_D32$D <- 32
+# multilocus_HM_D64$D <- 64
+# multilocus_HM_D128$D <- 128
+# multilocus_HM_D256$D <- 256
 
 GradTable <- rbind(multilocus_HM_D16, multilocus_HM_D32,
                    multilocus_HM_D64, multilocus_HM_D128, multilocus_HM_D256)
-GradTable <- GradTable[GradTable$width_H > 1,]
+GradTable$width[GradTable$width < 1] <- 1
+
+#write.table(GradTable, 'filled_drift_GradTable.tsv')
 
 multilocus_LM_D32$dispersal <- 0.25
 multilocus_HM_D32$dispersal <- 0.5
@@ -54,7 +56,7 @@ GradTableDispersal <- rbind(multilocus_LM_D32, multilocus_HM_D32)
 
 ### dispersal
 
-GradTableDispersal <- GradTableDispersal[GradTableDispersal$width_H > 1,]
+GradTableDispersal <- GradTableDispersal[GradTableDispersal$width > 1,]
 GradTableDispersal$sss <- GradTableDispersal$ss / GradTableDispersal$s + rnorm(nrow(GradTableDispersal), 0, 0.005)
 GradTableDispersal$s_norm <- GradTableDispersal$s + rnorm(nrow(GradTableDispersal), 0, 0.007)
 LMcol <- rgb(0.1,0.5,0.5, 0.75)
@@ -87,6 +89,7 @@ dev.off()
 
 ### BETA
 GradTable$sss <- GradTable$ss / GradTable$s + rnorm(nrow(GradTable), 0, 0.005)
+GradTable$ss_norm <- GradTable$ss + rnorm(nrow(GradTable), 0, 0.005)
 GradTable$s_norm <- GradTable$s + rnorm(nrow(GradTable), 0, 0.007)
 
 pdf('sss_vs_sel_beta.pdf')
@@ -123,6 +126,21 @@ pdf('sss_vs_AUFC_D.pdf')
           xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
 dev.off()
 
+##### sss vs BETA and DEMESIZE
+
+for(beta in unique(GradTable$b)){
+  GradTable_subset <- GradTable[GradTable$b == beta,]
+  pdf(paste0('sss_vs_D_b',round(beta,2),'.pdf'))
+    pal <- adjustcolor(brewer.pal(5,'Spectral'), 0.4)
+    PlotStat(GradTable_subset, stat = 'sss', par1 = 's_norm', par2 = 'D',
+            legend_position = 'topleft', add = F, pal = pal,
+            xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
+    pal <- brewer.pal(5,'Spectral')
+    PlotAverages(GradTable_subset, stat = 'sss', par1 = 's', par2 = 'D', pal = pal)
+    title(main = paste(expression(beta),beta))
+  dev.off()
+}
+
 # # from sss_vs_AUFC_D we see that we need AUFCs between 0.38 and 0.4 to be on the edge...
 # # create lots of combinations of selections and beta in whole reasonable range
 # selelctions <- rep(seq(0.001,1,length = 1000), 1000)
@@ -151,5 +169,5 @@ dev.off()
 # onelocus_HM_D256 <- read.table('setting_onelocus_D256.tsv')
 #
 # GradTable_L1 <- rbind(onelocus_HM_D16, onelocus_HM_D32, onelocus_HM_D64, onelocus_HM_D128, onelocus_HM_D256)
-# GradTable_L1 <- GradTable_L1[GradTable_L1$width_H > 1,]
-# PlotBoxplots(GradTable_L1, 'width_H', 's', 'D')
+# GradTable_L1 <- GradTable_L1[GradTable_L1$width > 1,]
+# PlotBoxplots(GradTable_L1, 'width', 's', 'D')
