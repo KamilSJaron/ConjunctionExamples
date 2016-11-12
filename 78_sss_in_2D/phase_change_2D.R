@@ -3,36 +3,6 @@ library(RColorBrewer)
 
 ####### Analysis of 2D estimates
 
-ml_diag_1 <- read.table('multilocus_setting_2D_diag.tsv')
-ml_diag_2 <- read.table('multilocus_setting_2D_diag2.tsv')
-ml_hori_1 <- read.table("multilocus_setting_2D.tsv")
-ml_hori_2 <- read.table("multilocus_setting_2D_2.tsv")
-
-selected_cols <- which(substr(colnames(ml_diag_1), 1, 5) == 'width')
-z1 <- as.matrix(ml_diag_1[, selected_cols])
-z2 <- as.matrix(ml_diag_2[, selected_cols])
-
-z <- z1 - z2
-hist(as.vector(z))
-
-selected_cols <- which(substr(colnames(ml_hori_1), 1, 6) == 'width_')
-z1 <- as.matrix(ml_hori_1[, selected_cols])
-z2 <- as.matrix(ml_hori_2[, selected_cols])
-
-z <- z1 - z2
-hist(as.vector(z))
-
-z <- ifelse(z1 > z2, z1, z2)
-hist(as.vector(z))
-hist(as.vector(z1))
-hist(as.vector(z2))
-
-hmean <- function(x){
-  length(x) / sum(1 / x, na.rm = T)
-}
-
-hist(apply(z, 1, mean) - apply(z, 1, hmean))
-
 # harmonic mean has mostly negligible effect, however in some instances up to 5
 # max(z1,z2) is suprisingly conservative, but i do not want to use it since we do not know
 # how wrong estimates are for wider zones
@@ -41,85 +11,66 @@ hist(apply(z, 1, mean) - apply(z, 1, hmean))
 # if(z1 is NA and z2 > 1, replace NA by z2)
 # take (method(z1)) as 2D width estimate
 
-Fill2DWidth <- function(GradTable, filter = 1, method = 'hmean', altGradTable = NA){
-  selected_cols <- which(substr(colnames(GradTable), 1, 6) == 'width_')
-  z <- as.matrix(GradTable[, selected_cols])
+GradTable <- read.table("multilocus_setting_2D.tsv")
+alt_GradTable <- read.table("multilocus_setting_2D_2.tsv")
+GradTable <- Fill2DMean(GradTable, 'width', filter = 1, method = hmean, alt_GradTable)
+GradTable <- Fill2DMean(GradTable, 'center', filter = 0, method = mean, alt_GradTable)
 
-  if(!all(is.na(altGradTable))){
-    selected_cols <- which(substr(colnames(altGradTable), 1, 6) == 'width_')
-    z_alt <- as.matrix(altGradTable[, selected_cols])
-    z <- ifelse(z < filter, z, z_alt)
-  }
+GradTable_onelocus <- read.table("onelocus_setting_2D.tsv")
+alt_GradTable <- read.table("onelocus_setting_2D_2.tsv")
+GradTable_onelocus <- Fill2DMean(GradTable_onelocus, 'width', filter = 1, method = hmean, alt_GradTable)
 
-  z[z < filter] <- NA
-  if(method == 'hmean'){
-    GradTable$width <- apply(z, 1, hmean)
-  } else {
-    GradTable$width <- apply(z, 1, mean, na.rm = T)
-  }
-  GradTable$var_width <- apply(z, 1, var, na.rm = T)
-
-  return(GradTable)
-}
-
-[5] "onelocus_setting_2D_2.tsv"       "onelocus_setting_2D_diag.tsv"
-[7] "onelocus_setting_2D_diag2.tsv"   "onelocus_setting_2D.tsv"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-########### 2D
-
-GratTable_onelocus <- read.table('onelocus_setting_2D.tsv')
-GratTable_multilocus <- read.table('multilocus_setting_2D.tsv')
-
-plot(GratTable_onelocus$width_H_1 ~ GratTable_onelocus$total_demes)
-plot(GratTable_multilocus$width_H_1 ~ GratTable_multilocus$total_demes)
-
-pdf('deviation_of_width_all.pdf')
-  Plot2DZone(GratTable_multilocus)
+pdf('total_number_of_demes_vs_width.pdf', width = 8, height = 4)
+  par(mfrow = c(1, 2))
+  plot(GradTable_onelocus$width ~ GradTable_onelocus$total_demes, main = 'onelocus',
+       pch = 20, xlab = 'total number of demes',
+       ylim = c(min(GradTable$width), max(GradTable$width)),
+       ylab = 'harmonic mean of widths greater than one', cex = 0.3)
+  plot(GradTable$width ~ GradTable$total_demes, main = 'multilocus',
+       pch = 20, xlab = 'total number of demes', ylab = '', cex = 0.3)
 dev.off()
 
-selected_cols <- which(substr(colnames(GratTable_multilocus), 1, 5) == 'width')
-z <- as.matrix(GratTable_multilocus[, selected_cols])
-z[z < 1] <- NA
-GratTable_multilocus[, selected_cols] <- z
+pdf('deviation_of_width_all.pdf', width = 8, height = 4)
+  par(mfrow = c(1, 2))
+  Plot2DZone(GradTable, pal = rainbow(5))
+  Plot2DZone(GradTable_onelocus, pal = rainbow(14))
+  title('width_i - mean(width), without filtering', outer=TRUE, line = -3)
+dev.off()
+
+GradTable <- FilterSetting(GradTable, 'width_', 1)
+GradTable_onelocus <- FilterSetting(GradTable_onelocus, 'width_', 1)
+
+pdf('deviation_of_width_filt.pdf', width = 8, height = 4)
+  par(mfrow = c(1, 2))
+  Plot2DZone(GradTable, pal = rainbow(5))
+  Plot2DZone(GradTable_onelocus, pal = rainbow(14))
+  title('width_i - mean(width), with filtering', outer = T, line = -3)
+dev.off()
 
 pdf('widths2D_fil.pdf')
-  Plot2DZone(GratTable_multilocus, center = F)
+  Plot2DZone(GradTable, center = F)
 dev.off()
 
-GratTable_multilocus$width <- rowMeans(z, na.rm = T)
+GradTable$width_norm <- GradTable$width + rnorm(nrow(GradTable), 0, 0.007)
+GradTable$s_norm <- GradTable$s + rnorm(nrow(GradTable), 0, 0.007)
 
-GratTable_multilocus$width_norm <- GratTable_multilocus$width + rnorm(nrow(GratTable_multilocus), 0, 0.007)
-GratTable_multilocus$s_norm <- GratTable_multilocus$s + rnorm(nrow(GratTable_multilocus), 0, 0.007)
-
-pdf('mean_width_vs_selection.pdf')
-  PlotStat(GratTable_multilocus, 'width_norm', 's_norm', 'b', ylab = 'mean width', xlab = 'selection')
+pdf('hmean_width_vs_selection.pdf')
+  PlotStat(GradTable, 'width_norm', 's_norm', 'b', ylab = 'mean width', xlab = 'selection')
 dev.off()
 
-GratTable_onelocus <- read.table('onelocus_setting_2D.tsv')
-selected_cols <- which(substr(colnames(GratTable_onelocus), 1, 5) == 'width')
-z <- as.matrix(GratTable_onelocus[, selected_cols])
-z[z < 1] <- NA
-GratTable_onelocus$width <- rowMeans(z, na.rm = T)
-GratTable_onelocus <- GetReplicateAverages(GratTable_onelocus, 'onelocus_average_widths.pdf')
+GradTable_onelocus <- GetReplicateAverages(GradTable_onelocus)
+GradTable <- FillClosestS(GradTable, GradTable_onelocus)
 
-GradTable <- GradTable[GradTable$width_H > 1,]
-GradTable <- FillClosestS(GradTable, onelocus_HM_D32)
+GradTable$sss_norm <- GradTable$ss / GradTable$s +
+                         rnorm(nrow(GradTable), 0, 0.005)
+
+pdf('sss_vs_sel_beta.pdf')
+  pal <- adjustcolor(brewer.pal(4,'Spectral'), 0.5)[-3]
+  PlotStat(GradTable, stat = 'sss_norm', par1 = 's_norm', par2 = 'b',
+           legend_position = NA, pal = pal, add = F, ylim = c(0, 1.7),
+           xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
+  pal <- brewer.pal(4,'Spectral')[-3]
+  PlotAverages(GradTable, 'sss_norm', 's', 'b', pal)
+  legend('topright', col = c(NA,pal), legend = c(expression(beta), unique(GradTable[,'b'])),
+         pch = 20, horiz = T, cex = 0.785)
+dev.off()
