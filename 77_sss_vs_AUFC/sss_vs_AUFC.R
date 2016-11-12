@@ -9,7 +9,7 @@ small_s <- small_s[small_s$s < 0.1,]
 onelocus_HM_D32 <- rbind(read.table('onelocus.tsv'), small_s)
 #GradTable <- GetReplicateAverages(GradTable)
 onelocus_HM_D32 <- GetReplicateAverages(onelocus_HM_D32, 'one_locus_D32_HM_widths.pdf', filter = 1)
-GradTable <- GradTable[GradTable$width_H > 1,]
+GradTable <- GradTable[GradTable$width > 1,]
 GradTable <- FillClosestS(GradTable, onelocus_HM_D32)
 GradTable$sss <- GradTable$ss / GradTable$s +
                          rnorm(nrow(GradTable), 0, 0.005)
@@ -58,10 +58,10 @@ library(ggplot2)
 pdf('width_distributions_vs_s.pdf')
   GradTable_b3 <- GradTable[GradTable$b == unique(GradTable$b)[3],]
   GradTable_b3$s <- as.factor(GradTable_b3$s)
-  hist_cut <- ggplot(GradTable_b3, aes(x=width_H, fill=s))
+  hist_cut <- ggplot(GradTable_b3, aes(x=width, fill=s))
   hist_cut + geom_density(alpha = 0.4)
 dev.off()
 
 # GradTable$sb <- factor(paste0('s',GradTable$s,'b',GradTable$b))
-# hist_cut <- ggplot(GradTable, aes(x=width_H, fill=sb))
+# hist_cut <- ggplot(GradTable, aes(x=width, fill=sb))
 # hist_cut + geom_density(alpha = 0.2)
