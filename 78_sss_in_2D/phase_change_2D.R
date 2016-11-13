@@ -17,10 +17,9 @@ GradTable <- Fill2DMean(GradTable, 'width', filter = 1, method = hmean, alt_Grad
 GradTable <- Fill2DMean(GradTable, 'center', filter = 0, method = mean, alt_GradTable)
 
 GradTable_onelocus <- read.table("onelocus_setting_2D.tsv")
-alt_GradTable <- read.table("onelocus_setting_2D_2.tsv")
-GradTable_onelocus <- Fill2DMean(GradTable_onelocus, 'width', filter = 1, method = hmean, alt_GradTable)
+GradTable_onelocus <- Fill2DMean(GradTable_onelocus, 'width', filter = 1, method = hmean)
 
-pdf('total_number_of_demes_vs_width.pdf', width = 8, height = 4)
+pdf('number_of_demes_vs_width.pdf', width = 8, height = 4)
   par(mfrow = c(1, 2))
   plot(GradTable_onelocus$width ~ GradTable_onelocus$total_demes, main = 'onelocus',
        pch = 20, xlab = 'total number of demes',
@@ -58,8 +57,8 @@ pdf('hmean_width_vs_selection.pdf')
   PlotStat(GradTable, 'width_norm', 's_norm', 'b', ylab = 'mean width', xlab = 'selection')
 dev.off()
 
-GradTable_onelocus <- GetReplicateAverages(GradTable_onelocus)
-GradTable <- FillClosestS(GradTable, GradTable_onelocus)
+selection_width_dictionary <- GetReplicateAverages(GradTable_onelocus)
+GradTable <- FillClosestS(GradTable, selection_width_dictionary)
 
 GradTable$sss_norm <- GradTable$ss / GradTable$s +
                          rnorm(nrow(GradTable), 0, 0.005)
@@ -73,4 +72,46 @@ pdf('sss_vs_sel_beta.pdf')
   PlotAverages(GradTable, 'sss_norm', 's', 'b', pal)
   legend('topright', col = c(NA,pal), legend = c(expression(beta), unique(GradTable[,'b'])),
          pch = 20, horiz = T, cex = 0.785)
+dev.off()
+
+sim_multilocus <- ReadSummary('multilocus_setting_2D.out')
+sim_onelocus <- ReadSummary('onelocus_setting_2D.out')
+
+GetHeterozygoteDemes <- function(onesim){
+  return(sum(onesim[,'f(heter)'] > 0))
+}
+
+GetHeterozygoteIndividualsFreq <- function(onesim){
+  # total number of heterozygotes will be this number * total number of demes * demesize
+  return(mean(onesim[, 'f(heter)']))
+}
+
+FillHeterozygotes <- function(GradTable, sim){
+  GradTable$number_of_het_ind <- unlist(lapply(sim, GetHeterozygoteIndividualsFreq)) *
+                                 GradTable$D * GradTable$total_demes
+  GradTable$number_of_het_demes <- unlist(lapply(sim, GetHeterozygoteDemes))
+  return(GradTable)
+}
+
+GradTable <- FillHeterozygotes(GradTable, sim_multilocus)
+GradTable_onelocus <- FillHeterozygotes(GradTable_onelocus, sim_onelocus)
+
+pdf('number_of_het_demes_vs_width.pdf', width = 8, height = 4)
+  par(mfrow = c(1, 2))
+  plot(GradTable_onelocus$width ~ GradTable_onelocus$number_of_het_demes, main = 'onelocus',
+       pch = 20, xlab = 'number of heterozygotious demes',
+       ylim = c(min(GradTable$width), max(GradTable$width)),
+       ylab = 'harmonic mean of widths greater than one', cex = 0.3)
+  plot(GradTable$width ~ GradTable$number_of_het_demes, main = 'multilocus',
+       pch = 20, xlab = 'number of heterozygotious demes', ylab = '', cex = 0.3)
+dev.off()
+
+pdf('number_of_het_individuals_vs_width.pdf', width = 8, height = 4)
+  par(mfrow = c(1, 2))
+  plot(GradTable_onelocus$width ~ GradTable_onelocus$number_of_het_ind, main = 'onelocus',
+       pch = 20, xlab = 'total number of heterozygotes',
+       ylim = c(min(GradTable$width), max(GradTable$width)),
+       ylab = 'harmonic mean of widths greater than one', cex = 0.3)
+  plot(GradTable$width ~ GradTable$number_of_het_ind, main = 'multilocus',
+       pch = 20, xlab = 'total number of heterozygotes', ylab = '', cex = 0.3)
 dev.off()

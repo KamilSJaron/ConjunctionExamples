@@ -10,13 +10,13 @@
 
 LOCI = 1
 NUMBERofCHROMOSOMES = 1
-LAMBDA = 1.53             
-SELECTIONpressure = [0.1,0.2,0.3,0.4,0.5,0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.90, 0.95, 0.99]            
+LAMBDA = 1.53
+SELECTIONpressure = [0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.90, 0.95, 0.99]
 BETA = 1
-DEMEsize = 32            
-NUMBERofGENERATIONS = 500           
+DEMEsize = 32
+NUMBERofGENERATIONS = 500
 
-REPLICATES = 10                    
+REPLICATES = 10
 
 #output parameters defining the output
 
