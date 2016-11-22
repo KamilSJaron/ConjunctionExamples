@@ -27,6 +27,7 @@ pdf('number_of_demes_vs_width.pdf', width = 8, height = 4)
        ylab = 'harmonic mean of widths greater than one', cex = 0.3)
   plot(GradTable$width ~ GradTable$total_demes, main = 'multilocus',
        pch = 20, xlab = 'total number of demes', ylab = '', cex = 0.3)
+  #points(GradTable$width ~ GradTable$total_demes, pch = 20, col = 'red', cex = 0.3,subset = GradTable$width < 3.3 & GradTable$total_demes > 250)
 dev.off()
 
 pdf('deviation_of_width_all.pdf', width = 8, height = 4)
@@ -76,6 +77,8 @@ dev.off()
 
 sim_multilocus <- ReadSummary('multilocus_setting_2D.out')
 sim_onelocus <- ReadSummary('onelocus_setting_2D.out')
+selections_of_sim <- (read.table('onelocus_selections')$V1)
+fixed_order <- order(rep(selections_of_sim, each = 10), decreasing=F)
 
 GetHeterozygoteDemes <- function(onesim){
   return(sum(onesim[,'f(heter)'] > 0))
@@ -94,7 +97,9 @@ FillHeterozygotes <- function(GradTable, sim){
 }
 
 GradTable <- FillHeterozygotes(GradTable, sim_multilocus)
-GradTable_onelocus <- FillHeterozygotes(GradTable_onelocus, sim_onelocus)
+GradTable_onelocus$number_of_het_ind <- unlist(lapply(sim_onelocus, GetHeterozygoteIndividualsFreq))[fixed_order] *
+                               GradTable_onelocus$D * GradTable_onelocus$total_demes
+GradTable_onelocus$number_of_het_demes <- unlist(lapply(sim_onelocus, GetHeterozygoteDemes))[fixed_order]
 
 pdf('number_of_het_demes_vs_width.pdf', width = 8, height = 4)
   par(mfrow = c(1, 2))
@@ -114,4 +119,18 @@ pdf('number_of_het_individuals_vs_width.pdf', width = 8, height = 4)
        ylab = 'harmonic mean of widths greater than one', cex = 0.3)
   plot(GradTable$width ~ GradTable$number_of_het_ind, main = 'multilocus',
        pch = 20, xlab = 'total number of heterozygotes', ylab = '', cex = 0.3)
+dev.off()
+
+deviants <- subset(GradTable,GradTable$width < 3.3 & GradTable$total_demes > 250)
+
+pdf('var_width_distribution.pdf')
+  hist(GradTable$var_width, main = 'histogram of variances of widths')
+  hist(deviants$var_width, add = T, col = 'red')
+  legend('topright', pch = 20, legend = c('overall', 'deviants'), col = c('black', 'red'))
+dev.off()
+
+pdf('var_center_distribution.pdf')
+  hist(GradTable$var_center, main = 'histogram of variances of centers')
+  hist(deviants$var_center, add = T, col = 'red')
+  legend('topright', pch = 20, legend = c('overall', 'deviants'), col = c('black', 'red'))
 dev.off()

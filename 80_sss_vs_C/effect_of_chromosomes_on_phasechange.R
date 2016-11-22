@@ -6,20 +6,12 @@ multilocus_C20 <- read.table('../75_effects_of_drift/multilocus_D32_HM.tsv')
 onelocus_C20 <- read.table('../75_effects_of_drift/one_locus_D32_HM.tsv')
 onelocus_C20 <- GetReplicateAverages(onelocus_C20, filter = 1)
 multilocus_C20 <- FillClosestS(multilocus_C20, onelocus_C20)
+multilocus_C20$LogL <- NA
 
 #### CHECK IF I CAN USE THE SAME ONELOCUS AS FOR OTHERS
 
-# sigma^2 = 0.5, D=32
-# onelocus_1 <- read.table('../75_effects_of_drift/one_locus_D32_HM.tsv')
-# onelocus_2 <- read.table('setting_L1.tsv')
-# onelocus_3 <- read.table('../79_onelocus_drift/setting_labda.tsv')
-# onelocus_1$run <- 1
-# onelocus_2$run <- 2
-# onelocus_3$run <- 3
-# onelocus <- rbind(onelocus_1, onelocus_2, onelocus_3)
-# PlotBoxplots(onelocus, 'width', 's', 'run', 'topright')
-
 onelocus <- read.table('setting_L1.tsv')
+onelocus <- FilterSetting(onelocus, 'logL', 1e-10)
 onelocus <- GetReplicateAverages(onelocus, filter = 1)
 
 multilocus_C1 <- read.table('setting_C1.tsv')

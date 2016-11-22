@@ -6,14 +6,14 @@ library(RColorBrewer)
 #GradTable <- FillSettingByHZAR(sim, GradTable)
 #write.table(GradTable, 'sss_vs_theta_widths.tsv')
 GradTable <- read.table('sss_vs_theta_widths.tsv')
-GradTable <- GradTable[GradTable$width_H > 1,]
+GradTable <- GradTable[GradTable$width > 1,]
 
 pdf('widths_vs_s_L.pdf')
-  PlotBoxplots(GradTable, 'width_H', 's', 'L', 'topright')
+  PlotBoxplots(GradTable, 'width', 's', 'L', 'topright')
 dev.off()
 
 pdf('widths_vs_s_L_zoomed.pdf')
-  PlotBoxplots(GradTable, 'width_H', 's', 'L', 'bottomleft', ylim = c(1.5,5))
+  PlotBoxplots(GradTable, 'width', 's', 'L', 'bottomleft', ylim = c(1.5,5))
 dev.off()
 
 # with better replicates

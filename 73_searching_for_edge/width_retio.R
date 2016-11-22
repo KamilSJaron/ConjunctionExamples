@@ -8,7 +8,7 @@ onelocus_HM_D32 <- getReplicateAverages(onelocus_HM_D32
 
 GradTable$a_width <- NA
 for(line in 1:nrow(GradTable)){
-  GradTable$a_width[line] <- onelocus_HM_D32$width_H[GradTable$s[line] == onelocus_HM_D32$s]
+  GradTable$a_width[line] <- onelocus_HM_D32$width[GradTable$s[line] == onelocus_HM_D32$s]
 }
 
 source('../scripts/add_alpha.R')
@@ -19,7 +19,7 @@ for(i in 2:nbetas){
 }
 
 GradTable$s <- GradTable$s + rnorm(nrow(GradTable), 0, 0.007)
-GradTable$w_ratio <- GradTable$a_width / GradTable$width_H
+GradTable$w_ratio <- GradTable$a_width / GradTable$width
 
 pdf('width_ratio_vs_selection_beta.pdf')
 PlotStat(GradTable, stat = 'w_ratio', par1 = 's', par2 = 'b',
