@@ -1,15 +1,13 @@
 library(ConjunctionStats)
 library(RColorBrewer)
 
-GradTable <- read.table('sss_vs_AUFC.tsv')
-#                   read.table('../75_effects_of_drift/one_locus_D32_HM.tsv')
-# read.table('onelocus.tsv')
-small_s <- read.table('../75_effects_of_drift/one_locus_D32_HM.tsv')
+small_s <- read.table('../75_effects_of_drift/setting_onelocus_D32.tsv')
 small_s <- small_s[small_s$s < 0.1,]
 onelocus_HM_D32 <- rbind(read.table('onelocus.tsv'), small_s)
-#GradTable <- GetReplicateAverages(GradTable)
 onelocus_HM_D32 <- GetReplicateAverages(onelocus_HM_D32, 'one_locus_D32_HM_widths.pdf', filter = 1)
-GradTable <- GradTable[GradTable$width > 1,]
+
+GradTable <- read.table('sss_vs_AUFC.tsv')
+GradTable <- GradTable[GradTable$LogL > -100 & GradTable$width > 1,]
 GradTable <- FillClosestS(GradTable, onelocus_HM_D32)
 GradTable$sss <- GradTable$ss / GradTable$s +
                          rnorm(nrow(GradTable), 0, 0.005)
@@ -38,15 +36,14 @@ pdf('sss_vs_beta_s.pdf')
          pch = 20, horiz = F, cex = 0.785, title = 'selection')
 dev.off()
 
-GradTable$AUFC <- getAUFC(GradTable$s, GradTable$b +
-                  rnorm(nrow(GradTable), 0, 0.008))
+GradTable$AUFC <- GetAUFC(GradTable$s, GradTable$b)
+GradTable$AUFC_norm <- GradTable$AUFC + rnorm(nrow(GradTable), 0, 0.008)
 pdf('sss_vs_AUFC_beta.pdf')
   pal <- adjustcolor(brewer.pal(8,'Spectral'), 0.3)
-  PlotStat(GradTable, stat = 'sss', par1 = 'AUFC',
+  PlotStat(GradTable, stat = 'sss', par1 = 'AUFC_norm',
            par2 = 'b', legend_position = F, pal = pal, add = F,
            xlab = 'AUFC + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
   pal <- adjustcolor(brewer.pal(8,'Spectral'))
-  GradTable$AUFC <- getAUFC(GradTable$s, GradTable$b)
   PlotAverages(subset(GradTable, GradTable$G == 500), stat = 'sss',
                par1 = 'AUFC', par2 = 'b', pal = pal)
   legend('topright', col = pal, legend = unique(GradTable[,'b']),
