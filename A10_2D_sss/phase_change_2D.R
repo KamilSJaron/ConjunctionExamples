@@ -12,9 +12,8 @@ library(RColorBrewer)
 # take (method(z1)) as 2D width estimate
 
 GradTable <- read.table("multilocus_setting_2D.tsv")
-alt_GradTable <- read.table("multilocus_setting_2D_2.tsv")
-GradTable <- Fill2DMean(GradTable, 'width', filter = 1, method = hmean, alt_GradTable)
-GradTable <- Fill2DMean(GradTable, 'center', filter = 0, method = mean, alt_GradTable)
+GradTable <- Fill2DMean(GradTable, 'width', filter = 1, method = hmean)
+GradTable <- Fill2DMean(GradTable, 'center', filter = 0, method = mean)
 
 GradTable_onelocus <- read.table("onelocus_setting_2D.tsv")
 GradTable_onelocus <- Fill2DMean(GradTable_onelocus, 'width', filter = 1, method = hmean)
@@ -67,17 +66,17 @@ GradTable$sss_norm <- GradTable$ss / GradTable$s +
 pdf('sss_vs_sel_beta.pdf')
   pal <- adjustcolor(brewer.pal(4,'Spectral'), 0.5)[-3]
   PlotStat(GradTable, stat = 'sss_norm', par1 = 's_norm', par2 = 'b',
-           legend_position = NA, pal = pal, add = F, ylim = c(0, 1.7),
+           legend_position = NA, pal = pal, add = F, ylim = c(0, 1.3),
            xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
   pal <- brewer.pal(4,'Spectral')[-3]
   PlotAverages(GradTable, 'sss_norm', 's', 'b', pal)
-  legend('topright', col = c(NA,pal), legend = c(expression(beta), unique(GradTable[,'b'])),
+  legend('bottomright', col = c(NA,pal), legend = c(expression(beta), unique(GradTable[,'b'])),
          pch = 20, horiz = T, cex = 0.785)
 dev.off()
 
 sim_multilocus <- ReadSummary('multilocus_setting_2D.out')
 sim_onelocus <- ReadSummary('onelocus_setting_2D.out')
-selections_of_sim <- (read.table('onelocus_selections')$V1)
+selections_of_sim <- (read.table('onelocus_selections.tsv')$V1)
 fixed_order <- order(rep(selections_of_sim, each = 10), decreasing=F)
 
 GetHeterozygoteDemes <- function(onesim){
@@ -119,18 +118,4 @@ pdf('number_of_het_individuals_vs_width.pdf', width = 8, height = 4)
        ylab = 'harmonic mean of widths greater than one', cex = 0.3)
   plot(GradTable$width ~ GradTable$number_of_het_ind, main = 'multilocus',
        pch = 20, xlab = 'total number of heterozygotes', ylab = '', cex = 0.3)
-dev.off()
-
-deviants <- subset(GradTable,GradTable$width < 3.3 & GradTable$total_demes > 250)
-
-pdf('var_width_distribution.pdf')
-  hist(GradTable$var_width, main = 'histogram of variances of widths')
-  hist(deviants$var_width, add = T, col = 'red')
-  legend('topright', pch = 20, legend = c('overall', 'deviants'), col = c('black', 'red'))
-dev.off()
-
-pdf('var_center_distribution.pdf')
-  hist(GradTable$var_center, main = 'histogram of variances of centers')
-  hist(deviants$var_center, add = T, col = 'red')
-  legend('topright', pch = 20, legend = c('overall', 'deviants'), col = c('black', 'red'))
 dev.off()

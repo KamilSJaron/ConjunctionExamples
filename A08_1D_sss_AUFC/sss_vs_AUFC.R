@@ -38,11 +38,11 @@ dev.off()
 
 GradTable$AUFC <- GetAUFC(GradTable$s, GradTable$b)
 GradTable$AUFC_norm <- GradTable$AUFC + rnorm(nrow(GradTable), 0, 0.008)
-pdf('sss_vs_AUFC_beta.pdf')
+pdf('S5_sss_vs_AUFC_beta.pdf')
   pal <- adjustcolor(brewer.pal(8,'Spectral'), 0.3)
   PlotStat(GradTable, stat = 'sss', par1 = 'AUFC_norm',
            par2 = 'b', legend_position = F, pal = pal, add = F,
-           xlab = 'AUFC + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
+           xlab = 'AUFC + N(0,0.008)', ylab = '(s* / S) + N(0,0.005)')
   pal <- adjustcolor(brewer.pal(8,'Spectral'))
   PlotAverages(subset(GradTable, GradTable$G == 500), stat = 'sss',
                par1 = 'AUFC', par2 = 'b', pal = pal)
