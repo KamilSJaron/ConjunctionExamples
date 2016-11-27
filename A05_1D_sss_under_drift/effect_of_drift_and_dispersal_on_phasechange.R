@@ -1,48 +1,24 @@
 library(ConjunctionStats)
 library(RColorBrewer)
 
-# sigma^2 = 0.5, D=16
-multilocus_HM_D16 <- read.table('../74_one_locus_widths/multilocus.tsv')
-onelocus_HM_D16 <- read.table('../74_one_locus_widths/one_locus_widths.tsv')
+# sigma^2 = 0.5, D=16; move here
+multilocus_HM_D16 <- read.table('../74_one_locus_widths/setting_D16_HM.tsv')
+onelocus_HM_D16 <- read.table('../74_one_locus_widths/setting_onelocus_D16_HM.tsv')
 onelocus_HM_D16 <- GetReplicateAverages(onelocus_HM_D16, filter = 1)
 multilocus_HM_D16 <- FillClosestS(multilocus_HM_D16, onelocus_HM_D16)
 
-# sigma^2 = 0.25, D=32
-multilocus_LM_D32 <- read.table('multilocus_D32_LM.tsv')
-onelocus_LM_D32 <- read.table('one_locus_D32_LM.tsv')
+# sigma^2 = 0.25, D=32; move away,
+multilocus_LM_D32 <- read.table('setting_D32_LM.tsv')
+onelocus_LM_D32 <- read.table('setting_onelocus_D32_LM.tsv')
 onelocus_LM_D32 <- GetReplicateAverages(onelocus_LM_D32, filter = 1)
 multilocus_LM_D32 <- FillClosestS(multilocus_LM_D32, onelocus_LM_D32)
 
-# sigma^2 = 0.5, D=32
-multilocus_HM_D32 <- read.table('multilocus_D32_HM.tsv')
-onelocus_HM_D32 <- read.table('one_locus_D32_HM.tsv')
-onelocus_HM_D32 <- GetReplicateAverages(onelocus_HM_D32, filter = 1)
-multilocus_HM_D32 <- FillClosestS(multilocus_HM_D32, onelocus_HM_D32)
-
-# sigma^2 = 0.5, D=64
-multilocus_HM_D64 <- read.table('setting_D64_HM.tsv')
-onelocus_HM_D64 <- read.table('setting_onelocus_D64.tsv')
-onelocus_HM_D64 <- GetReplicateAverages(onelocus_HM_D64, filter = 1)
-multilocus_HM_D64 <- FillClosestS(multilocus_HM_D64, onelocus_HM_D64)
-
-# sigma^2 = 0.5, D=128
-multilocus_HM_D128 <- read.table('setting_D128_HM.tsv')
-onelocus_HM_D128 <- read.table('setting_onelocus_D128.tsv')
-onelocus_HM_D128 <- GetReplicateAverages(onelocus_HM_D128, filter = 1)
-multilocus_HM_D128 <- FillClosestS(multilocus_HM_D128, onelocus_HM_D128)
-
-# sigma^2 = 0.5, D=256
-multilocus_HM_D256 <- read.table('setting_D256_HM.tsv')
-onelocus_HM_D256 <- read.table('setting_onelocus_D256.tsv')
-onelocus_HM_D256 <- GetReplicateAverages(onelocus_HM_D256, filter = 1)
-multilocus_HM_D256 <- FillClosestS(multilocus_HM_D256, onelocus_HM_D256)
-
-# multilocus_HM_D16$D <- 16
-# multilocus_LM_D32$D <- 32
-# multilocus_HM_D32$D <- 32
-# multilocus_HM_D64$D <- 64
-# multilocus_HM_D128$D <- 128
-# multilocus_HM_D256$D <- 256
+for(D in c(32,64,128,256)){
+  ml <- read.table(paste0('setting_D',D,'_HM.tsv'))
+  onelocus <- read.table(paste0('setting_onelocus_D',D,'.tsv'))
+  onelocus <- GetReplicateAverages(onelocus, filter = 1)
+  assign(paste0('multilocus_HM_D',D), FillClosestS(ml, onelocus))
+}
 
 GradTable <- rbind(multilocus_HM_D16, multilocus_HM_D32,
                    multilocus_HM_D64, multilocus_HM_D128, multilocus_HM_D256)
@@ -52,6 +28,11 @@ GradTable$width[GradTable$width < 1] <- 1
 
 multilocus_LM_D32$dispersal <- 0.25
 multilocus_HM_D32$dispersal <- 0.5
+
+### error in estimation (investigate)
+multilocus_LM_D32$total_demes <- c()
+colnames(multilocus_LM_D32) <- colnames(multilocus_HM_D32)
+
 GradTableDispersal <- rbind(multilocus_LM_D32, multilocus_HM_D32)
 
 ### dispersal
@@ -119,7 +100,7 @@ pdf('sss_vs_demesize_s065.pdf')
   hist_cut + geom_density(alpha = 0.4)
 dev.off()
 
-GradTable$AUFC <- getAUFC(GradTable$s, GradTable$b) + rnorm(nrow(GradTable), 0, 0.007)
+GradTable$AUFC <- GetAUFC(GradTable$s, GradTable$b) + rnorm(nrow(GradTable), 0, 0.007)
 pdf('sss_vs_AUFC_D.pdf')
   PlotStat(GradTable, stat = 'sss', par1 = 'AUFC', par2 = 'D',
           legend_position = 'topright', pal = pal, add = F,

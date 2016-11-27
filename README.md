@@ -20,6 +20,7 @@ There are two series of simulations:
 
  - V01 - V0X validation of Conjunction using analytical predictions of known settings
  - A01 - AXX novel results for multilocus clines
+ - N01 - N02 non-published simulations
 
 ### Simulation for validation
 
@@ -36,8 +37,8 @@ There are two series of simulations:
 
 ## Non-published simulations
 
- - [N01_departures_from_Hardy–Weinberg] observed and theorietiacl population departure from Hardy–Weinberg equillibrium
- - [N02_onelocus_clines_under_drift] the width of onelocus clines under dirft
+ - [N01](N01_departures_from_Hardy–Weinberg) observed and theorietiacl population departure from Hardy–Weinberg equillibrium
+ - [N02](N02_onelocus_clines_under_drift) the width of onelocus clines under dirft
 
 ## licence
 
