@@ -1,12 +1,10 @@
 library(ConjunctionStats)
 
-GradTable <- read.table('filled_drift_GradTable.tsv')
-
-sim_D32 <- ReadSummary('multilocus_HM.out')
-GradTable_D32 <- read.table('multilocus_D32_HM.tsv')
-onelocus_HM_D32 <- read.table('one_locus_D32_HM.tsv')
+sim_D32 <- ReadSummary('setting_D32_HM.out')
+GradTable_D32 <- read.table('setting_D32_HM.tsv')
+onelocus_HM_D32 <- read.table('setting_onelocus_D32.tsv')
 onelocus_HM_D32 <- GetReplicateAverages(onelocus_HM_D32, filter = 1)
-GradTable_D32 <- FillClosestS(multilocus_HM_D32, onelocus_HM_D32)
+GradTable_D32 <- FillClosestS(GradTable_D32, onelocus_HM_D32)
 
 GradTable_D32$width[GradTable_D32$width < 1] <- 1
 GradTable_D32$sss <- GradTable_D32$ss / GradTable_D32$s + rnorm(nrow(GradTable_D32), 0, 0.005)
@@ -14,7 +12,7 @@ GradTable_D32$s_norm <- GradTable_D32$s + rnorm(nrow(GradTable_D32), 0, 0.007)
 
 for(beta in unique(GradTable_D32$b)){
   for(selection in unique(GradTable_D32$s)){
-    base <- paste0('whichD32b', beta,'s', selection)
+    base <- paste0('D32b', beta,'s', selection)
     pdf(paste0('cline_',base,'.pdf'))
       which_sims <- which(GradTable_D32$b == beta &
                    GradTable_D32$s == selection &
@@ -47,7 +45,7 @@ pdf('clines_on_the_edge_.pdf')
   # plot
   for(beta in unique(GradTable_D32$b)){
     for(selection in c(0.60,0.65,0.70)){
-      base <- paste0('whichD32b', beta,'s', selection * 10)
+      base <- paste0('D32b', beta,'s', selection * 10)
       print(base)
       pal <- adjustcolor(brewer.pal(5,'Spectral'), 0.6)
       plot(numeric(0), ylim = c(0,1), xlim = c(-30,30), xaxt='n', yaxt='n')
@@ -107,7 +105,7 @@ pdf('logit_clines_on_the_edge_.pdf')
   # plot
   for(beta in unique(GradTable_D32$b)){
     for(selection in c(0.60,0.65,0.70)){
-      base <- paste0('whichD32b', beta,'s', selection * 10)
+      base <- paste0('D32b', beta,'s', selection * 10)
       print(base)
       pal <- adjustcolor(brewer.pal(5,'Spectral'), 0.6)
       plot(numeric(0), ylim = c(-10,10), xlim = c(-30,30), xaxt='n', yaxt='n')

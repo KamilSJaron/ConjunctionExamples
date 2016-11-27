@@ -34,6 +34,12 @@ There are two series of simulations:
 
 ## Abalyses for the manuscript
 
+ - [A01](A01_0D_sss_epistasis)
+ - [A05](A05_1D_sss_under_drift)
+ - [A06](A06_1D_sss_dispersal_effect)
+ - [A07](A07_sss_related_to_chromosome_number)
+ - [A08](A08_1D_sss_AUFC)
+ - [A10](A10_2D_sss)
 
 ## Non-published simulations
 
