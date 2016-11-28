@@ -1,0 +1,3 @@
+"the rate of increase of gene frequency variance under drift has to be equal to pq⁄2N"
+
+This test demonstrates correct implementation of random mating in a deme and the effect of the population size. The simulation will consist of D onelocus individuals in a single deme without any migration, half of those indivuduals of haplotype AA and the second half of haplotype BB. If both mechanisms are will implemented, than variance of mean hybrid index in the deme over many replicates (100) of the simulation will increase with rate pq⁄2N, until demes with one haplotype only start to occur, then the variance will increase slower until all demes will have one or another haplotype only. At the point variance is fixed on the maximum.

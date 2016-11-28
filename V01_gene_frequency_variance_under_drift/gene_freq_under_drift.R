@@ -20,8 +20,8 @@ for(deme_size in deme_sizes){
   }
 }
 
-prediction <- function(G, deme_size, factor = 1){
-  return(factor * (G + 0.25) / (2 * deme_size))
+prediction <- function(G, deme_size){
+  return(G * (0.25 / (2 * deme_size)))
 }
 
 pdf('variance_of_allele_frequency_under_drift.pdf')
@@ -31,9 +31,5 @@ pdf('variance_of_allele_frequency_under_drift.pdf')
   for(D in deme_sizes){
     col <- pal[which(D == deme_sizes)]
     lines(prediction(generations, D) ~ generations, col = col)
-  }
-
-  for(D in deme_sizes){
-    lines(prediction(generations, D, 1/4) ~ generations, col = 1)
   }
 dev.off()
