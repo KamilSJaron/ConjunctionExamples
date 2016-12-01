@@ -1,6 +1,7 @@
 library(ConjunctionStats)
 
 sims <- ReadSummary('multilocus_cline.out')
+sims <- ReadSummary('rep.out')
 GradTable <- ReadSetting()
 
 getStat <- function(df, stat){return(df[,stat])}
