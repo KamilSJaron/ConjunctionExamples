@@ -32,7 +32,7 @@ for(beta in unique(GradTable_D32$b)){
                       logit = F, add = T, col = pal[index])
       }
       pal <- adjustcolor(brewer.pal(5,'Spectral'), 1)
-      legend('topleft', col = pal, pch = 20, legend = c((1:5) * 100), title = 'Generation')
+      legend('topleft', col = pal, pch = 20, legend = c((1:5) * 100), title = 'Generation', bty = "n")
     dev.off()
   }
 }

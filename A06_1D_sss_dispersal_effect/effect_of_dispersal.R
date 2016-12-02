@@ -46,5 +46,5 @@ pdf('sss_vs_dispersal_hist.pdf')
          -1, col = LMcol, pch = 15)
   legend('topright', c('0.5', '0.25', 'overlap', 'mean'),
          title = expression(sigma^2), pch = c(rep(20,3),15),
-         col = c(HMcol, LMcol, rgb(0.2,0.4,0.2), 'black'))
+         col = c(HMcol, LMcol, rgb(0.2,0.4,0.2), 'black'), bty = "n")
 dev.off()

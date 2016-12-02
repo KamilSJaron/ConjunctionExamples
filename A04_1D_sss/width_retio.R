@@ -23,6 +23,6 @@ GradTable$w_ratio <- GradTable$a_width / GradTable$width
 
 pdf('width_ratio_vs_selection_beta.pdf')
 PlotStat(GradTable, stat = 'w_ratio', par1 = 's', par2 = 'b',
-         legend_position = 'topleft', pal = pal, add = F,
+         legend_position = 'topleft', pal = pal, add = F, bty = "n",
          xlab = 's + N(0,0.007)', ylab = 'single locus width / measured width')
 dev.off()

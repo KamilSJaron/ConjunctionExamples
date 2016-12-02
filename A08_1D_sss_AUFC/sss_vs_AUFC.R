@@ -44,6 +44,9 @@ par1 = 'AUFC_norm'
 par2 = 'b'
 par3 = 's'
 
+cards <- c('2660', '2663', '2665', '2666')
+shapes <- c('25B2','25BC','25CF')
+
 pdf('SX_sss_vs_AUFC.pdf')
   pal <- brewer.pal(8,'Spectral')
   t_pal <- adjustcolor(pal, 0.5)
