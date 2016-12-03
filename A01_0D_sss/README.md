@@ -25,3 +25,11 @@ Effects we explore that possibly involved in the phase change:
  - stochasticity: the idea is that drift is breaking cascades of blocks at the beginning of the introgression so the effect of the cascade can result in fewer small blocks and therefore slower introgression.
  - number of chromosomes: will increase the effect of recombination rate
  - space: Here we present three spatial models; 0D - that is analogical to Baird 1995; 1D stepping stone model: chain of demes with fixed deme size is linking two infinite populations; 2D stepping stone model, where grid of simulated demes is formed into torus
+
+### Take home from this sim
+
+There is no critical value in this parametric subspace, more relaxed epistatic interactions have to be explored (A02).
+
+Approximate convergence is rather fast, therefore at least initial space search can be performed on limited number of generation (50) with more replicates.
+
+Analogical model with 1D spatial model is in folder A04.

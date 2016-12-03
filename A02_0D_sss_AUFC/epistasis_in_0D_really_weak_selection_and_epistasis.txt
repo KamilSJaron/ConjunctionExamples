@@ -1,6 +1,3 @@
-#################################################
-# TEMPLATE FILE OF PARAMETERS FOR THE SIMULATOR #
-#################################################
 # this file serves as setting for the program Conjunction
 # hosted by GitHub https://github.com/KamilSJaron/Conjunction
 # all parameters are well documented in wiki of the repository
@@ -20,12 +17,11 @@ REPLICATES = 5
 
 #output parameters defining the output
 
-NUMBERofSAVES = 1                    # integer smaller than number of generations
+NUMBERofSAVES = 1  
 NAMEofOUTPUTfile = 
 TYPEofOUTPUTfile = blocks
-DELAY = 0                           # integer smaller than number of generations
+DELAY = 0     
 
 # World definition
 
 WORLDdefinition -quick = 'InfInf'
-# Predefined worlds: {'HybridZone';LowMigrationBazykin';'InfInf';'Arena'}
