@@ -11,7 +11,7 @@ so the coupling coefficient is greater than one.
 
 We focus on multilocus clines, where selection acting on every single loci is
 close to zero. We use approximation for infinite number of loci
-per individual (200,000) spread over various numbers of chromosomes (1, 5, 10 and 20).
+per individual (200,000) spread over 20 chromosomes.
 Parameter lambda is set to 1.53 representing biologically relevant recombination rates.
 
 Original phase change was described by coupling coefficient theta defined as selection / recombination:
