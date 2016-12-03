@@ -8,24 +8,23 @@
 
 # Numerical parameters
 
-LOCI = 10000                
-NUMBERofCHROMOSOMES = 20   
-LAMBDA = 1.53             
-SELECTIONpressure = [0.6, 0.65, 0.7, 0.75, 0.8]            
-BETA = [0.125, 0.09, 0.0625] 
-DEMEsize = 64            
-NUMBERofGENERATIONS = 500           
+LOCI = 10000
+NUMBERofCHROMOSOMES = 20
+LAMBDA = 1.53
+SELECTIONpressure = [0.6, 0.65, 0.7, 0.75, 0.8]
+BETA = [0.125, 0.09, 0.0625]
+DEMEsize = 64
+NUMBERofGENERATIONS = 500
 
-REPLICATES = 5                    
+REPLICATES = 5
 
 #output parameters defining the output
 
-NUMBERofSAVES = 5                    # integer smaller than number of generations
+NUMBERofSAVES = 5         
 NAMEofOUTPUTfile =
 TYPEofOUTPUTfile = blocks
-DELAY = 0                           # integer smaller than number of generations
+DELAY = 0
 
 # World definition
 
 WORLDdefinition -quick = 'HybridZone' 1
-# Predefined worlds: {'HybridZone';LowMigrationBazykin';'InfInf';'Arena'}
