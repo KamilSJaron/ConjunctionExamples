@@ -1,46 +1,37 @@
 library(ConjunctionStats)
 library(RColorBrewer)
 
-# sigma^2 = 0.25, D=32; move away,
-multilocus_LM_D32 <- read.table('setting_D32_LM.tsv')
-onelocus_LM_D32 <- read.table('setting_onelocus_D32_LM.tsv')
-onelocus_LM_D32 <- GetReplicateAverages(onelocus_LM_D32, filter = 1)
-multilocus_LM_D32 <- FillClosestS(multilocus_LM_D32, onelocus_LM_D32)
-
+GradTable <- data.frame()
 for(D in c(16, 32,64,128,256)){
   ml <- read.table(paste0('setting_D',D,'_HM.tsv'))
   onelocus <- read.table(paste0('setting_onelocus_D',D,'.tsv'))
   onelocus <- GetReplicateAverages(onelocus, filter = 1)
-  assign(paste0('multilocus_HM_D',D), FillClosestS(ml, onelocus))
+  GradTable <- rbind(GradTable, FillClosestS(ml, onelocus))
 }
 
-GradTable <- rbind(multilocus_HM_D16, multilocus_HM_D32,
-                   multilocus_HM_D64, multilocus_HM_D128, multilocus_HM_D256)
 GradTable$width[GradTable$width < 1] <- 1
 
 #write.table(GradTable, 'filled_drift_GradTable.tsv')
-GradTable$sss <- GradTable$ss / GradTable$s + rnorm(nrow(GradTable), 0, 0.005)
-GradTable$ss_norm <- GradTable$ss + rnorm(nrow(GradTable), 0, 0.005)
-GradTable$s_norm <- GradTable$s + rnorm(nrow(GradTable), 0, 0.007)
+GradTable <- FillSss(GradTable)
 
+pal <- brewer.pal(3,'Spectral')
 pdf('sss_vs_sel_beta.pdf')
-  pal <- brewer.pal(4,'Spectral')[-3]
-  pal <- c(adjustcolor(pal[1], 0.35), adjustcolor(pal[2], 0.65), adjustcolor(pal[3], 0.45))
-  PlotStat(GradTable, stat = 'sss', par1 = 's_norm', par2 = 'b',
+  PlotStat(GradTable, stat = 'sss_norm', par1 = 's_norm', par2 = 'b',
            legend_position = 'topleft', pal = pal, add = F,
            xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
-  pal <- brewer.pal(4,'Spectral')[-3]
   PlotAverages(GradTable, stat = 'sss', par1 = 's', par2 = 'b', pal = pal)
 dev.off()
 
 ### DEME SIZE
+Dpal <- brewer.pal(5,'RdYlGn')
+t_Dpal <- adjustcolor(Dpal, 0.4)
+
 pdf('sss_vs_sel_demesize.pdf')
-pal <- adjustcolor(brewer.pal(5,'Spectral'), 0.4)
-PlotStat(GradTable, stat = 'sss', par1 = 's_norm', par2 = 'D',
-        legend_position = 'topleft', add = F, pal = pal,
-        xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
-pal <- brewer.pal(5,'Spectral')
-PlotAverages(GradTable, stat = 'sss', par1 = 's', par2 = 'D', pal = pal)
+  PlotStat(GradTable, stat = 'sss_norm', par1 = 's_norm', par2 = 'D',
+          legend_position = NA, add = F, pal = t_Dpal,
+          xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
+  PlotAverages(GradTable, stat = 'sss', par1 = 's', par2 = 'D', pal = Dpal)
+  legend('topleft', title = 'D', legend = unique(GradTable$D), pch = 20, col = Dpal, bty = "n")
 dev.off()
 
 pdf('sss_vs_demesize_s065.pdf')
@@ -50,10 +41,10 @@ pdf('sss_vs_demesize_s065.pdf')
   hist_cut + geom_density(alpha = 0.4)
 dev.off()
 
-GradTable$AUFC <- GetAUFC(GradTable$s, GradTable$b) + rnorm(nrow(GradTable), 0, 0.007)
+GradTable$AUFC_norm <- GetAUFC(GradTable$s, GradTable$b) + rnorm(nrow(GradTable), 0, 0.007)
 pdf('sss_vs_AUFC_D.pdf')
-  PlotStat(GradTable, stat = 'sss', par1 = 'AUFC', par2 = 'D',
-          legend_position = 'topright', pal = pal, add = F,
+  PlotStat(GradTable, stat = 'sss_norm', par1 = 'AUFC_norm', par2 = 'D',
+          legend_position = 'topright', pal = Dpal, add = F,
           xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
 dev.off()
 
@@ -62,12 +53,11 @@ dev.off()
 for(beta in unique(GradTable$b)){
   GradTable_subset <- GradTable[GradTable$b == beta,]
   pdf(paste0('sss_vs_D_b',round(beta,2),'.pdf'))
-    pal <- adjustcolor(brewer.pal(5,'Spectral'), 0.4)
-    PlotStat(GradTable_subset, stat = 'sss', par1 = 's_norm', par2 = 'D',
-            legend_position = 'topleft', add = F, pal = pal,
+    PlotStat(GradTable_subset, stat = 'sss_norm', par1 = 's_norm', par2 = 'D',
+            legend_position = 'topleft', add = F, pal = t_Dpal,
             xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
-    pal <- brewer.pal(5,'Spectral')
-    PlotAverages(GradTable_subset, stat = 'sss', par1 = 's', par2 = 'D', pal = pal)
+    PlotAverages(GradTable_subset, stat = 'sss', par1 = 's', par2 = 'D',
+                 pal = Dpal, plot_sd = T, epsilon = 0.002)
     title(main = paste(expression(beta),beta))
   dev.off()
 }
