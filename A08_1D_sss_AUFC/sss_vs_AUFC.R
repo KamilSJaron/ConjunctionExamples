@@ -14,29 +14,29 @@ GradTable$sss <- GradTable$ss / GradTable$s +
 GradTable$s_norm <- GradTable$s + rnorm(nrow(GradTable), 0, 0.007)
 GradTable$b_norm <- GradTable$b + rnorm(nrow(GradTable), 0, 0.007)
 
+beta_pal <- colorRampPalette(brewer.pal(9,"Spectral"))(38)
+pal <- beta_pal[round(log(unique(GradTable$b)*10) * 10) + 15]
+pal_t <- adjustcolor(pal, 0.3)
+
 pdf('sss_vs_sel_beta.pdf')
-  pal <- adjustcolor(brewer.pal(8,'Spectral'), 0.3)
   PlotStat(GradTable, stat = 'sss', par1 = 's_norm', par2 = 'b',
-           legend_position = NA, pal = pal, add = F, ylim = c(0, 1.7),
+           legend_position = NA, pal = pal_t, add = F, ylim = c(0, 1.7),
            xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
-  pal <- brewer.pal(8,'Spectral')
   PlotAverages(GradTable, 'sss', 's', 'b', pal)
   legend('topright', col = c(NA,pal), legend = c(expression(beta), unique(GradTable[,'b'])),
          pch = 20, horiz = T, cex = 0.785, bty = "n")
 dev.off()
 
 pdf('sss_vs_beta_s.pdf')
-  pal <- adjustcolor(brewer.pal(8,'Spectral'), 0.3)
   PlotStat(GradTable, stat = 'sss', par1 = 'b_norm', par2 = 's',
-           legend_position = NA, pal = pal, add = F, bty = "n",
+           legend_position = NA, pal = pal_t, add = F, bty = "n",
            xlab = paste0(expression(beta),' + N(0,0.007)'), ylab = '(s* / S) + N(0,0.005)')
-  pal <- brewer.pal(8,'Spectral')
   PlotAverages(GradTable, 'sss', 'b', 's', pal)
   legend('topright', col = pal, legend = c(unique(GradTable[,'b'])),
          pch = 20, horiz = F, cex = 0.785, title = 'selection')
 dev.off()
 
-GradTable$AUFC <- GetAUFC(GradTable$s, GradTable$b)
+GradTable$AUFC <- 1 - GetAUFC(GradTable$s, GradTable$b)
 GradTable$AUFC_norm <- GradTable$AUFC + rnorm(nrow(GradTable), 0, 0.002)
 
 stat = 'sss'
@@ -48,18 +48,15 @@ par3 = 's'
 #shapes <- c('25B2','25BC','25CF')
 
 pdf('sss_vs_AUFC_points.pdf')
-  pal <- brewer.pal(8,'Spectral')
-  t_pal <- adjustcolor(pal, 0.5)
-
   xlim = c(min(GradTable[, par1]), max(GradTable[, par1]))
   ylim = c(min(GradTable[, stat], na.rm = T), max(GradTable[, stat], na.rm = T))
 
-  plot(numeric(0), xlim = xlim, ylim = ylim, xlab = 'AUFC + N(0,0.002)',
+  plot(numeric(0), xlim = xlim, ylim = ylim, xlab = '1 - AUFC + N(0,0.002)',
        ylab = 's* / s + N(0,0.005)')
 
   for (par_state in unique(GradTable[, par2])) {
     col <- pal[which(par_state == unique(GradTable[, par2]))]
-    t_col <- t_pal[which(par_state == unique(GradTable[, par2]))]
+    t_col <- pal_t[which(par_state == unique(GradTable[, par2]))]
     for (par3_state in unique(GradTable[, par3])){
       pch <- 6 + which(par3_state == unique(GradTable[, par3]))
 
@@ -79,16 +76,13 @@ pdf('sss_vs_AUFC_points.pdf')
         title = 'sel', pch = rev(seq(7, by = 1, length = 8)), bty = "n")
 dev.off()
 
-pdf('SYb_1D_AUFC.pdf')
-  pal <- brewer.pal(8,'Spectral')
-  t_pal <- adjustcolor(pal, 0.5)
-
+pdf('2b_1D_AUFC.pdf')
   xlim <- c(min(GradTable[, par1]), max(GradTable[, par1]))
-  ylim <- c(min(GradTable[, stat], na.rm = T) - 0.02, max(GradTable[, stat], na.rm = T))
+  ylim <- c(min(GradTable[, stat], na.rm = T) - 0.02, 1.3)
   epsilon <- 0.005
 
-  plot(numeric(0), xlim = xlim, ylim = ylim, xlab = 'AUFC + N(0,0.002)',
-       ylab = 's* / s + N(0,0.005)')
+  plot(numeric(0), xlim = xlim, ylim = ylim, xlab = '1 - AUFC',
+       ylab = 's* / s ± sd')
 
   betas <- unique(GradTable$b)
   selections <- unique(GradTable$s)
@@ -114,9 +108,9 @@ pdf('SYb_1D_AUFC.pdf')
     sd <- tapply(SubTable$sss, SubTable$AUFC, sd)
     lines(x, y, col = col, lwd = 1.5)
   }
-  legend(0.52, 1.55, col = pal, legend = unique(GradTable[,'b']),
+  legend(0.46, 1.3, col = pal, legend = unique(GradTable[,'b']),
          title = expression(beta), pch = 20, bty = "n")
-  legend(0.46, 1.55, col = 1, legend = rev(unique(GradTable[,'s'])),
+  legend(0.40, 1.3, col = 1, legend = rev(unique(GradTable[,'s'])),
         title = 'sel', pch = rev(seq(7, by = 1, length = 8)), bty = "n")
 dev.off()
 

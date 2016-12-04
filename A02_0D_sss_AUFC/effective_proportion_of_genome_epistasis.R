@@ -17,13 +17,13 @@ for(file in files){
 
 GradTable <- GradTable[order(GradTable$b),]
 
-beta_pal <- colorRampPalette(brewer.pal(9,"Spectral"))(1000)
+beta_pal <- colorRampPalette(brewer.pal(9,"Spectral"))(38)
 
-pal <- beta_pal[unique(GradTable$b) * 1000]
-pal_t <- adjustcolor(pal, 0.2)
-pdf('2a_0D_edge.pdf')
+pal <- beta_pal[round(log(unique(GradTable$b)*10) * 10) + 15]
+pal_t <- adjustcolor(pal, 0.3)
+pdf('SYa_0D_edge.pdf')
   PlotStat(GradTable, 'sss', 's_norm', 'b', NA, xlab = 'selection + N(0, 0.005)',
-           ylab = 's* / S', ylim = c(0,1.4), pal = pal_t, pch = 20)
+           ylab = 's* / S ± sd', ylim = c(0,1.4), pal = pal_t, pch = 20)
   PlotAverages(GradTable, 'sss', 's', 'b', pal = pal, plot_sd = T, epsilon = 0.005)
   legend('topleft', legend = unique(GradTable$b),
          col = pal, pch = 20, bty = "n", title = expression(beta))
@@ -35,12 +35,12 @@ dev.off()
 # legend('topright', legend = unique(GradTable$b),
 #        col = pal, pch = 20, bty = "n", title = expression(beta))
 
-GradTable$AUFC <- GetAUFC(GradTable$s, GradTable$b)
+GradTable$AUFC <- 1 - GetAUFC(GradTable$s, GradTable$b)
 
-pdf('SYa_0D_AUFC.pdf')
+pdf('2a_0D_AUFC.pdf')
   PlotAverages(GradTable, 'sss', 'AUFC', 'b',
-               plot_sd = T, epsilon = 0.005, add = F, xlim = c(0.23,0.9),
-               ylim = c(0,1.2), xlab = 'AUFC', ylab = 's* / S', pal = pal)
-  legend('bottomleft', legend = unique(GradTable$b),
+               plot_sd = T, epsilon = 0.005, add = F, xlim = c(0.1, 1 - 0.23),
+               ylim = c(0,1.2), xlab = '1 - AUFC', ylab = 's* / S ± sd', pal = pal)
+  legend('bottomright', legend = unique(GradTable$b),
          col = pal, pch = 20, bty = "n", title = expression(beta))
 dev.off()

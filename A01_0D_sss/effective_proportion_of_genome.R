@@ -20,14 +20,18 @@ GradTable <- GradTable[order(GradTable$b),]
 
 write.table(GradTable, 'sss_0D_initial_search.tsv')
 
-beta_pal <- colorRampPalette(brewer.pal(9,"Spectral"))(1000)
+# I need a visible scaling between close values (0.09, 0.125 etc), but I need also values like 0.02 and 1
+# and I do not need that fine granularity there, therefore I figured out this transformation
+# (10 * log(10 * beta)) + 15, that will produce for betas in interval 0.0275 and 1
+# values between 1 and 38
+beta_pal <- colorRampPalette(brewer.pal(9,"Spectral"))(38)
 
-pal <- beta_pal[unique(GradTable$b) * 1000]
+pal <- beta_pal[round(log(unique(GradTable$b)*10) * 10) + 15]
 pal_t <- adjustcolor(pal, 0.3)
 
 pdf('sss_no_phase_change.pdf')
   PlotStat(GradTable, 'sss', 's_norm', 'b', NA, xlab = 'selection + N(0, 0.005)',
-           ylab = 's* / S', ylim = c(0,1.4), pal = pal_t, pch = 20)
+           ylab = 's* / S ± sd', ylim = c(0,1.4), pal = pal_t, pch = 20)
   PlotAverages(GradTable, 'sss', 's', 'b', pal = pal, plot_sd = T, epsilon = 0.005)
   legend('bottomright', legend = unique(GradTable$b),
          col = pal, pch = 20, bty = "n", title = expression(beta))

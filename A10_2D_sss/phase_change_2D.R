@@ -59,16 +59,26 @@ pdf('hmean_width_vs_selection.pdf')
   PlotStat(GradTable, 'width_norm', 's_norm', 'b', ylab = 'mean width', xlab = 'selection')
 dev.off()
 
-pal <- adjustcolor(brewer.pal(4,'Spectral'), 0.5)[-3]
-t_pal <- brewer.pal(4,'Spectral')[-3]
+beta_pal <- colorRampPalette(brewer.pal(9,"Spectral"))(38)
+pal <- beta_pal[round(log(unique(GradTable$b)*10) * 10) + 15]
+pal_t <- adjustcolor(pal, 0.3)
 
-pdf('2c_2D_edge.pdf')
-  PlotStat(GradTable, stat = 'sss_norm', par1 = 's_norm', par2 = 'b',
-           legend_position = NA, pal = pal, add = F, ylim = c(0, 1.3),
-           xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
-  PlotAverages(GradTable, 'sss_norm', 's', 'b', pal)
-  legend('bottomright', col = c(NA,pal), legend = c(expression(beta), unique(GradTable[,'b'])),
-         pch = 20, horiz = T, cex = 0.785)
+pdf('SYc_2D_edge.pdf')
+  PlotStat(GradTable, 'sss', 's_norm', 'b', NA, xlab = 'selection + N(0, 0.005)',
+          ylab = 's* / S ± sd', ylim = c(0,1.3), pal = pal_t, pch = 20)
+  PlotAverages(GradTable, 'sss', 's', 'b', pal = pal, plot_sd = T, epsilon = 0.005)
+  legend('topleft', legend = unique(GradTable$b),
+        col = pal, pch = 20, bty = "n", title = expression(beta))
+dev.off()
+
+GradTable$AUFC <- 1 - GetAUFC(GradTable$s, GradTable$b)
+
+pdf('2c_2D_AUFC.pdf')
+  PlotAverages(GradTable, 'sss', 'AUFC', 'b',
+               plot_sd = T, epsilon = 0.005, add = F,
+               ylim = c(0,1.3), xlab = '1 - AUFC', ylab = 's* / S ± sd', pal = pal)
+  legend('bottomright', legend = unique(GradTable$b),
+         col = pal, pch = 20, bty = "n", title = expression(beta))
 dev.off()
 
 # sim_multilocus <- ReadSummary('multilocus_setting_2D.out')

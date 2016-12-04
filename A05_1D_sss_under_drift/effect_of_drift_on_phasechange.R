@@ -32,7 +32,7 @@ dev.off()
 Dpal <- brewer.pal(5,'RdYlGn')
 t_Dpal <- adjustcolor(Dpal, 0.4)
 
-pdf('sss_vs_sel_demesize.pdf')
+pdf('SX_sss_vs_drift.pdf')
   PlotStat(GradTable, stat = 'sss_norm', par1 = 's_norm', par2 = 'D',
           legend_position = NA, add = F, pal = t_Dpal,
           xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')

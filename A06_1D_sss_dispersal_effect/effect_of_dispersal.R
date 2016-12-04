@@ -26,7 +26,7 @@ HMcol <- rgb(0.5,0.5,0.1, 0.75)
 
 # I do not want to observe an effect of deme size, therefore I filter data only
 # to subset that contain the same set of the parameters of both simulated disperals
-pdf('sss_vs_sel_dispersal.pdf')
+pdf('SX_sss_vs_dispersal.pdf')
   PlotStat(GradTable, stat = 'sss_norm', par1 = 's_norm', par2 = 'dispersal',
            legend_position = 'bottomright', pal = c(HMcol, LMcol), add = F,
            xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
