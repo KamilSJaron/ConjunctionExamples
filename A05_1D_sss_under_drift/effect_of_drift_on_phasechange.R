@@ -2,9 +2,15 @@ library(ConjunctionStats)
 library(RColorBrewer)
 
 GradTable <- data.frame()
-for(D in c(16, 32,64,128,256)){
-  ml <- read.table(paste0('setting_D',D,'_HM.tsv'))
-  onelocus <- read.table(paste0('setting_onelocus_D',D,'.tsv'))
+for(D in c(16,32,64,128,256)){
+  if(D == 32){
+    # this simulation was already performed in A04
+    ml <- read.table('../A04_1D_sss/setting_D32.tsv')
+    onelocus <- read.table('../A04_1D_sss/setting_onelocus_D32.tsv')
+  } else {
+    ml <- read.table(paste0('setting_D',D,'.tsv'))
+    onelocus <- read.table(paste0('setting_onelocus_D',D,'.tsv'))
+  }
   onelocus <- GetReplicateAverages(onelocus, filter = 1)
   GradTable <- rbind(GradTable, FillClosestS(ml, onelocus))
 }

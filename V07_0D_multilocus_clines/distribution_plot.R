@@ -1,9 +1,6 @@
 library(ConjunctionStats)
 library(RColorBrewer)
 
-palette <- brewer.pal(6,"RdYlBu")
-palette <- palette[c(1,3,6)]
-
 GradTable <- ReadSetting('setting.txt')
 
 GradTable$theta <- GradTable$s / GradTable$r
@@ -29,7 +26,7 @@ for(s in unique(GradTable$s)){
     x <- (log((7/8)^c(0:100)) + log((7/8)^(1:101))) / 2
     eqy <- log(BlocksDistribution(exp(x),s,0.2,100 * (1 - s)))
     lines(x,eqy)
-    pal <- colorRampPalette(brewer.pal(9,"Spectral"))(2500)
+    pal <- colorRampPalette(brewer.pal(9,"PuBuGn"))(2500)
 
     legend( -16.2, 8.2,
             legend=c("theoretical distr.", "", "simulated distr.",

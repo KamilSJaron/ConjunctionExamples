@@ -17,9 +17,9 @@ for(file in files){
 
 GradTable <- GradTable[order(GradTable$b),]
 
+beta_pal <- colorRampPalette(brewer.pal(9,"Spectral"))(1000)
 
-
-pal <- brewer.pal(length(unique(GradTable$b)), "Spectral")
+pal <- beta_pal[unique(GradTable$b) * 1000]
 pal_t <- adjustcolor(pal, 0.2)
 pdf('2a_0D_edge.pdf')
   PlotStat(GradTable, 'sss', 's_norm', 'b', NA, xlab = 'selection + N(0, 0.005)',

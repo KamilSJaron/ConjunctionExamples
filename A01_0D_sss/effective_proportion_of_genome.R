@@ -17,8 +17,14 @@ GradTable$sss <- (GradTable$D * (1 - GradTable$s)) / (GradTable$s * GradTable$JP
 GradTable$theta <- GradTable$s / GradTable$r
 GradTable$s_norm <- GradTable$s + rnorm(nrow(GradTable), 0, 0.005)
 GradTable <- GradTable[order(GradTable$b),]
-pal <- brewer.pal(6, "RdYlBu")[c(1,3,5)]
+
+write.table(GradTable, 'sss_0D_initial_search.tsv')
+
+beta_pal <- colorRampPalette(brewer.pal(9,"Spectral"))(1000)
+
+pal <- beta_pal[unique(GradTable$b) * 1000]
 pal_t <- adjustcolor(pal, 0.3)
+
 pdf('sss_no_phase_change.pdf')
   PlotStat(GradTable, 'sss', 's_norm', 'b', NA, xlab = 'selection + N(0, 0.005)',
            ylab = 's* / S', ylim = c(0,1.4), pal = pal_t, pch = 20)

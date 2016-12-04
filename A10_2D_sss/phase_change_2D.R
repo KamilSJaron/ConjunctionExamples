@@ -59,12 +59,13 @@ pdf('hmean_width_vs_selection.pdf')
   PlotStat(GradTable, 'width_norm', 's_norm', 'b', ylab = 'mean width', xlab = 'selection')
 dev.off()
 
+pal <- adjustcolor(brewer.pal(4,'Spectral'), 0.5)[-3]
+t_pal <- brewer.pal(4,'Spectral')[-3]
+
 pdf('2c_2D_edge.pdf')
-  pal <- adjustcolor(brewer.pal(4,'Spectral'), 0.5)[-3]
   PlotStat(GradTable, stat = 'sss_norm', par1 = 's_norm', par2 = 'b',
            legend_position = NA, pal = pal, add = F, ylim = c(0, 1.3),
            xlab = 's + N(0,0.007)', ylab = '(s* / S) + N(0,0.005)')
-  pal <- brewer.pal(4,'Spectral')[-3]
   PlotAverages(GradTable, 'sss_norm', 's', 'b', pal)
   legend('bottomright', col = c(NA,pal), legend = c(expression(beta), unique(GradTable[,'b'])),
          pch = 20, horiz = T, cex = 0.785)

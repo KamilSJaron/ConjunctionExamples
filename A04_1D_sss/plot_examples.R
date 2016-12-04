@@ -1,7 +1,7 @@
 library(ConjunctionStats)
 
-sim_D32 <- ReadSummary('setting_D32_HM.out')
-GradTable_D32 <- read.table('setting_D32_HM.tsv')
+sim_D32 <- ReadSummary('setting_D32.out')
+GradTable_D32 <- read.table('setting_D32.tsv')
 onelocus_HM_D32 <- read.table('setting_onelocus_D32.tsv')
 onelocus_HM_D32 <- GetReplicateAverages(onelocus_HM_D32, filter = 1)
 GradTable_D32 <- FillClosestS(GradTable_D32, onelocus_HM_D32)
@@ -9,6 +9,9 @@ GradTable_D32 <- FillClosestS(GradTable_D32, onelocus_HM_D32)
 GradTable_D32$width[GradTable_D32$width < 1] <- 1
 GradTable_D32$sss <- GradTable_D32$ss / GradTable_D32$s + rnorm(nrow(GradTable_D32), 0, 0.005)
 GradTable_D32$s_norm <- GradTable_D32$s + rnorm(nrow(GradTable_D32), 0, 0.007)
+
+pal <- brewer.pal(5,'PuBuGn')
+t_pal <- adjustcolor(pal, 0.6)
 
 for(beta in unique(GradTable_D32$b)){
   for(selection in unique(GradTable_D32$s)){
@@ -19,9 +22,8 @@ for(beta in unique(GradTable_D32$b)){
                    GradTable_D32$G == 100)
       GradSubTable <- subset(GradTable_D32,
                              b == beta & s == selection & G == 100)
-      pal <- adjustcolor(brewer.pal(5,'Spectral'), 0.6)
       PlotHybridZone(sim_D32[which_sims], center = GradSubTable,
-                   logit = F, col = pal[1], xlim = c(-30,30))
+                   logit = F, col = t_pal[1], xlim = c(-30,30))
       for(index in 2:5){
         which_sims <- which(GradTable_D32$b == beta &
                      GradTable_D32$s == selection &
@@ -29,9 +31,9 @@ for(beta in unique(GradTable_D32$b)){
         GradSubTable <- subset(GradTable_D32,
                                b == beta & s == selection & G == index * 100)
         PlotHybridZone(sim_D32[which_sims], center = GradSubTable,
-                      logit = F, add = T, col = pal[index])
+                      logit = F, add = T, col = t_pal[index])
       }
-      pal <- adjustcolor(brewer.pal(5,'Spectral'), 1)
+
       legend('topleft', col = pal, pch = 20, legend = c((1:5) * 100), title = 'Generation', bty = "n")
     dev.off()
   }
@@ -47,7 +49,6 @@ pdf('clines_on_the_edge_.pdf')
     for(selection in c(0.60,0.65,0.70)){
       base <- paste0('D32b', beta,'s', selection * 10)
       print(base)
-      pal <- adjustcolor(brewer.pal(5,'Spectral'), 0.6)
       plot(numeric(0), ylim = c(0,1), xlim = c(-30,30), xaxt='n', yaxt='n')
 
       if(beta == unique(GradTable_D32$b)[3]){
@@ -64,7 +65,7 @@ pdf('clines_on_the_edge_.pdf')
         GradSubTable <- subset(GradTable_D32,
                                b == beta & s == selection & G == index * 100)
         PlotHybridZone(sim_D32[which_sims], center = GradSubTable,
-                      logit = F, add = T, col = pal[index])
+                      logit = F, add = T, col = t_pal[index])
       }
 
       if(beta == unique(GradTable_D32$b)[1]){
@@ -88,7 +89,6 @@ pdf('clines_on_the_edge_.pdf')
       }
 
       if(legend == 9){
-        pal <- adjustcolor(brewer.pal(5,'Spectral'), 1)
         legend('bottomright', col = pal, pch = 20, legend = c((1:5) * 100),
                bty = "n", title = 'Generation')
       }

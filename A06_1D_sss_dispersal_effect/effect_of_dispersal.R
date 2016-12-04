@@ -8,8 +8,8 @@ onelocus_LM_D32 <- GetReplicateAverages(onelocus_LM_D32, filter = 1)
 multilocus_LM_D32 <- FillClosestS(multilocus_LM_D32, onelocus_LM_D32)
 multilocus_LM_D32$dispersal <- 0.25
 
-multilocus_HM_D32 <- read.table('../A05_1D_sss_under_drift/setting_D32_HM.tsv')
-onelocus_HM_D32 <- read.table('../A05_1D_sss_under_drift/setting_onelocus_D32.tsv')
+multilocus_HM_D32 <- read.table('../A04_1D_sss/setting_D32.tsv')
+onelocus_HM_D32 <- read.table('../A04_1D_sss/setting_onelocus_D32.tsv')
 onelocus_HM_D32 <- GetReplicateAverages(onelocus_HM_D32, filter = 1)
 multilocus_HM_D32 <- FillClosestS(multilocus_HM_D32, onelocus_HM_D32)
 multilocus_HM_D32$dispersal <- 0.5

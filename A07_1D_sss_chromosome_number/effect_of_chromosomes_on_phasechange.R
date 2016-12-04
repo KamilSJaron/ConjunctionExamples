@@ -4,7 +4,7 @@ library(RColorBrewer)
 onelocus <- read.table('setting_L1.tsv')
 onelocus <- GetReplicateAverages(onelocus, filter = 1)
 
-GradTable <- read.table('../A05_1D_sss_under_drift/setting_D32_HM.tsv')
+GradTable <- read.table('../A04_1D_sss/setting_D32_HM.tsv')
 GradTable <- FillClosestS(GradTable, onelocus)
 
 for(C in c('C10', 'C5', 'C1')){
