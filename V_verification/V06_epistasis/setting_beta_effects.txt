@@ -1,0 +1,15 @@
+NUMBERofCHROMOSOMES = 1 
+LAMBDA = 0.5
+SELECTIONpressure = 0.5 
+BETA = [0.0625,0.25,1,4,16]
+LOCI = [2,8]
+DEMEsize = 512
+NUMBERofGENERATIONS = 1000
+
+NUMBERofSAVES = 10           # less than number of generations
+NAMEofOUTPUTfile = 
+
+# World definition
+
+WORLDdefinition -quick = 'HybridZone' 1
+

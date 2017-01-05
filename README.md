@@ -1,36 +1,29 @@
 # Conjunction Examples
 
-is set of [Conjunction](https://github.com/KamilSJaron/Conjunction) simulations with known expectations. These simulations supposed to serve both as examples and validation (theoretical predictions are included).
+is set of [Conjunction](https://github.com/KamilSJaron/Conjunction) simulations. These simulations supposed to serve for validation of the simulator (theoretical predictions are included) and for presentation and record of novel results.
 
 Every set of simulations is in one folder, which contain:
  - `README.md` - the theoretical beckground
- - `run.sh` - one line bash cript running the simulation and its analysis
+ - `Makefile` - a make script for running the analysis (see make help in any analysis folder or http://swcarpentry.github.io/make-novice/ for basic make tutorial)
  - `setting*.txt` - setting(s) used for the set of simulations
  - `*.R` - R scripts using R package [ConjunctionStats](https://github.com/KamilSJaron/ConjunctionStats) to generate
- - `expected_output` - subfolder with results expected to be generated if the script `run.sh` is executed
+ - `figures` - subfolder with figures are expected to be created by the `Makefile`
 
 ## Requirements
 
 - installed [Conjunction](https://github.com/KamilSJaron/Conjunction) (see instructions in the Conjunction's README file)
 - installed R and R package [ConjunctionStats](https://github.com/KamilSJaron/ConjunctionStats) and its dependencies (HZAR, RColorBrewer)
+- GNU make
 
-# Content
+# Sections
 
-There are two series of simulations:
+Simulations are categorised according the role in the publication (http://biorxiv.org/)
 
- - V01 - V0X validation of Conjunction using analytical predictions of known settings
- - A01 - AXX novel results for multilocus clines
- - N01 - N03 non-published simulations
+ - [V](V_verification): validation of Conjunction using analytical predictions of known settings
+ - [A](A_phase_change): evaluation of phase change for three spatial models
+ - [B](B_relative_selection): evaluation of the consequences of relative selection model
+ - [N](N_non-published) simulations not discussed in publication
 
-### Simulation for validation
-
- - [V01](V01_gene_frequency_variance_under_drift) the rate of increase of gene frequency variance under drift
- - [V02](V02_LD_decay) decay of linkage disequllibria given recombination rate of two loci
- - [V03](V03_collapse) collapse of a 1D cline without selection
- - [V04](V04_gene_frequency_fluctuations) the decrease in correlation between gene frequency fluctuations under migration, heterozygote advantage, and drift have to be according the prediction (Malecot 1948)
- - [V05](V05_one_locus_cline) the width of onelocus cline confronted to diffustion approximation (Bazykin 1969)
- - [V06](V06_epistasis) the shape of multilocus cline maintained by epistatic selection (Baron & Gale 1993)
- - [V07](V07_0D_multilocus_clines) proportion of genome acting together in spatial less simulation (Baird 1995)
 
 ## Analyses for the manuscript
 
@@ -43,11 +36,7 @@ There are two series of simulations:
  - [A09](A09_1D_lambda) 1D recombination rates (lambda)
  - [A10](A10_2D_sss) 2D
 
-## Non-published simulations
 
- - [N01](N01_departures_from_Hardy–Weinberg) observed and theoretical population departure from Hardy–Weinberg equilibrium
- - [N02](N02_onelocus_clines_under_drift) the width of onelocus clines under drift
- - [N03](N03_finite_multilocus_model)
 
 ## licence
 

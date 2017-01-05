@@ -24,7 +24,7 @@ prediction <- function(G, deme_size){
   return(G * (0.25 / (2 * deme_size)))
 }
 
-pdf('variance_of_allele_frequency_under_drift.pdf')
+pdf('figures/variance_of_allele_frequency_under_drift.pdf')
   pal <- brewer.pal(3, "Set1")
   PlotStat(allele_freq_var, 'allele_freq_var', 'G', 'D', 'topleft',
            ylab = 'variance of allele frequency', xlab = "Generation", pal = pal)

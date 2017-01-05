@@ -32,7 +32,7 @@ pal <- brewer.pal(11,"PRGn")
 # The link between parameter lambda and recombination rate is explained in
 # the [Conjunction wiki](https://github.com/KamilSJaron/Conjunction/wiki/Individual)
 
-pdf('LD_decay.pdf')
+pdf('figures/LD_decay.pdf')
 	plot(c(), pch = 17, col = pal[2], xlim = c(1,30) , ylim = c(-6,-1.4), xlab = "Generation", ylab = 'ln(LD)',cex.lab=1.1, cex.axis=1.1)
 	points(log(LDs$l_0_25), pch = 17, col = pal[8], cex = 1.3)
 	lines(x, log(eq(x, 0.19793)), col = pal[8])
