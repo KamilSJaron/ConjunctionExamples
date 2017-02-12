@@ -1,22 +1,17 @@
-.PHONY : all
-plot : figures/LD_decay.pdf
+COMP_WIDTHS = Rscript ../../compute_widths.R
 
-## LD_chrom.out : preform sim for C = 2, L = 1
-LD_chrom.out : setting_C.txt
-	conjunction $< > $@ 2> LD_chrom.err
+## make plot : create output figure
+.PHONY : plot
+plot : figures/LD_decay.png
 
-## LD_loci.out : preform sim for C = 1, L = 2
-LD_loci.out : setting_L.txt
-	conjunction $< > $@ 2> LD_loci.err
+include ../../scripts/template.mk
 
-## sims : perform both simulations
-.PHONY : sims
-sims : LD_loci.out LD_chrom.out
-
-## plot : plot simulated results against theoretical expecation
-figures/LD_decay.pdf : LD_decay.R sims setting_C.txt setting_L.txt
+figures/LD_decay.png : LD_decay.R sims/LD_loci.out sims/LD_chrom.out
+	mkdir -p figures
 	Rscript $<
 
-.PHONY : help
-help : Makefile
-	@sed -n 's/^##//p' $<
+## make help : this help
+## make clean : delete everything computed
+## NOT WORKING SO FAR:
+## make redo : invoke recalculation of sims if newer binary is installed in PATH
+## make download : download simulation results form server

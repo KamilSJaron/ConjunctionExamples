@@ -2,9 +2,9 @@ library('RColorBrewer')
 library('ConjunctionStats')
 
 # contains 90 saves of three simulations
-ld_sum_loci <- ReadSummary('LD_loci.out')
+ld_sum_loci <- ReadSummary('sims/LD_loci.out')
 # contains 30 saves if one simulation
-ld_sum_chrom <- ReadSummary('LD_chrom.out')
+ld_sum_chrom <- ReadSummary('sims/LD_chrom.out')
 
 # function will be used for easy extraction of one column from list of data frames (summaries)
 getLD <- function(df){
@@ -14,7 +14,7 @@ getLD <- function(df){
 # make a data frame of all LDs
 LDs <- data.frame(generation = 1:30)
 LDs$indipendent <- unlist(lapply(ld_sum_chrom, getLD))
-# just by checking setting_L we see order of lambdas
+# just by checking setting we see order of lambdas
 LDs$l_0_25 <- unlist(lapply(ld_sum_loci, getLD))[1:30]
 LDs$l_0_5 <- unlist(lapply(ld_sum_loci, getLD))[31:60]
 LDs$l_3 <- unlist(lapply(ld_sum_loci, getLD))[61:90]
@@ -32,7 +32,7 @@ pal <- brewer.pal(11,"PRGn")
 # The link between parameter lambda and recombination rate is explained in
 # the [Conjunction wiki](https://github.com/KamilSJaron/Conjunction/wiki/Individual)
 
-pdf('figures/LD_decay.pdf')
+png('figures/LD_decay.png')
 	plot(c(), pch = 17, col = pal[2], xlim = c(1,30) , ylim = c(-6,-1.4), xlab = "Generation", ylab = 'ln(LD)',cex.lab=1.1, cex.axis=1.1)
 	points(log(LDs$l_0_25), pch = 17, col = pal[8], cex = 1.3)
 	lines(x, log(eq(x, 0.19793)), col = pal[8])

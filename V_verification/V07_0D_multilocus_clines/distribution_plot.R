@@ -1,7 +1,7 @@
 library(ConjunctionStats)
 library(RColorBrewer)
 
-GradTable <- ReadSetting('setting.txt')
+GradTable <- ReadSetting('multilocus_cline.txt')
 
 GradTable$theta <- GradTable$s / GradTable$r
 

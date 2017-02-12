@@ -1,8 +1,8 @@
 library(ConjunctionStats)
 
-GradTable <- ReadSetting('setting.txt')
+GradTable <- ReadSetting('sims/allele_freq_var.txt')
 GradTable <- GradTable[,c(1,7,8)]
-GradTable$HI <- read.table('allele_freq_var_hi_only.out', header = F)$V1
+GradTable$HI <- read.table('sims/allele_freq_var_hi_only.out', header = F)$V1
 
 deme_sizes <- unique(GradTable$D)
 generations <- unique(GradTable$G)
@@ -24,7 +24,7 @@ prediction <- function(G, deme_size){
   return(G * (0.25 / (2 * deme_size)))
 }
 
-pdf('figures/variance_of_allele_frequency_under_drift.pdf')
+png('figures/variance_of_allele_frequency_under_drift.png')
   pal <- brewer.pal(3, "Set1")
   PlotStat(allele_freq_var, 'allele_freq_var', 'G', 'D', 'topleft',
            ylab = 'variance of allele frequency', xlab = "Generation", pal = pal)
