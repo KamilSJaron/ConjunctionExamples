@@ -6,6 +6,6 @@ plot : figures/bazykin.png
 
 include ../../scripts/template.mk
 
-figures/bazykin.png : bazykin.R sims/bazykin.tsv sims/bazykin_LM.tsv
+figures/bazykin.png : bazykin.R sims/bazykin.out sims/bazykin_LM.out
 	mkdir -p figures
 	Rscript $<

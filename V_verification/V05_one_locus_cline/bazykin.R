@@ -4,8 +4,13 @@
 
 library(ConjunctionStats)
 
-GradTable <- read.table('sims/bazykin.tsv')
+GradTable <- ReadSetting('./sims/bazykin.txt')
+sims <- ReadSummary('./sims/bazykin.out')
+GradTable <- FillSetting(sims, GradTable, method = 'nlm')
+
 GradTableLM <- read.table('sims/bazykin_LM.tsv')
+simsLM <- ReadSummary('./sims/bazykin_LM.out')
+GradTableLM <- FillSetting(simsLM, GradTableLM, method = 'hzar')
 
 x <-seq(0.01,0.99,by=0.01)
 
