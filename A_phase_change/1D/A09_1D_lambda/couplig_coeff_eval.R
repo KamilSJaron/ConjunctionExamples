@@ -2,16 +2,7 @@ library(ConjunctionStats)
 library(RColorBrewer)
 library(nlme)
 
-onelocus <- read.table('../A07_1D_sss_chromosome_number/setting_L1.tsv')
-onelocus <- GetReplicateAverages(onelocus, filter = 1)
-
-GradTable <- data.frame()
-
-for(C in c('C20','C10', 'C10_ws', 'C5', 'C5_ws', 'C1', 'C1_ws')){
-  multilocus <- read.table(paste0('setting_',C,'.tsv'))
-  GradTable <- rbind(GradTable, FillClosestS(multilocus, onelocus))
-}
-GradTable <- FillSss(GradTable)
+GradTable <- read.table('all_sims.tsv')
 
 pdf(paste0('sss_vs_sel_C_lambda.pdf'), width = 8)
   pal_names <- c('RdPu', 'BuGn', 'PuBu', 'YlOrBr')

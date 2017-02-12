@@ -32,4 +32,4 @@ There is no critical value in this parametric subspace, more relaxed epistatic i
 
 Approximate convergence is rather fast, therefore at least initial space search can be performed on limited number of generation (50) with more replicates.
 
-Analogical model with 1D spatial model is in folder A04.
+

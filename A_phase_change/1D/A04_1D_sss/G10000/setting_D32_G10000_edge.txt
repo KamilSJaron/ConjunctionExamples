@@ -1,0 +1,20 @@
+LOCI = 10000
+NUMBERofCHROMOSOMES = 20
+LAMBDA = 1.53
+SELECTIONpressure = 0.65
+BETA = 0.09
+DEMEsize = 32
+NUMBERofGENERATIONS = 10000
+
+REPLICATES = 1
+
+#output parameters defining the output
+
+NUMBERofSAVES = 100
+NAMEofOUTPUTfile =
+TYPEofOUTPUTfile = blocks
+DELAY = 0
+
+# World definition
+
+WORLDdefinition -quick = 'HybridZone' 1

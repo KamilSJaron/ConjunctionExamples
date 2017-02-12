@@ -9,9 +9,7 @@ onelocus_HM_D32 <- GetReplicateAverages(onelocus_HM_D32, 'one_locus_D32_HM_width
 GradTable <- read.table('sss_vs_AUFC.tsv')
 GradTable <- GradTable[GradTable$LogL > -100 & GradTable$width > 1,]
 GradTable <- FillClosestS(GradTable, onelocus_HM_D32)
-GradTable$sss <- GradTable$ss / GradTable$s +
-                         rnorm(nrow(GradTable), 0, 0.005)
-GradTable$s_norm <- GradTable$s + rnorm(nrow(GradTable), 0, 0.007)
+GradTable <- FillSss(GradTable)
 GradTable$b_norm <- GradTable$b + rnorm(nrow(GradTable), 0, 0.007)
 
 beta_pal <- colorRampPalette(brewer.pal(9,"Spectral"))(38)
@@ -76,6 +74,7 @@ pdf('sss_vs_AUFC_points.pdf')
         title = 'sel', pch = rev(seq(7, by = 1, length = 8)), bty = "n")
 dev.off()
 
+par1 = 'AUFC'
 pdf('2b_1D_AUFC.pdf')
   xlim <- c(min(GradTable[, par1]), max(GradTable[, par1]))
   ylim <- c(min(GradTable[, stat], na.rm = T) - 0.02, 1.3)
@@ -87,11 +86,11 @@ pdf('2b_1D_AUFC.pdf')
   betas <- unique(GradTable$b)
   selections <- unique(GradTable$s)
 
-  for (sel in selections) {
-    col <- pal[which(sel == selections)]
+  for (beta in betas){
+    col <- pal[which(beta == betas)]
     t_col <- adjustcolor(col, 0.5)
-    for (beta in betas){
-      pch <- 6 + which(beta == betas)
+    for (sel in selections) {
+      pch <- 6 + which(sel == selections)
       SubTable <- subset(GradTable, GradTable$s == sel &
                                     GradTable$b == beta)
       x <- unique(SubTable$AUFC)
@@ -102,14 +101,13 @@ pdf('2b_1D_AUFC.pdf')
       segments(x-epsilon, y-sd, x + epsilon, y-sd, col = col)
       segments(x-epsilon, y+sd, x + epsilon, y+sd, col = col)
     }
-    SubTable <- subset(GradTable, GradTable$s == sel)
+    SubTable <- subset(GradTable, GradTable$b == beta)
     y <- tapply(SubTable$sss, SubTable$AUFC, mean)
     x <- as.numeric(names(y))
-    sd <- tapply(SubTable$sss, SubTable$AUFC, sd)
     lines(x, y, col = col, lwd = 1.5)
   }
   legend(0.46, 1.3, col = pal, legend = unique(GradTable[,'b']),
-         title = expression(beta), pch = 20, bty = "n")
+         title = paste0(expression(beta)), pch = 20, bty = "n")
   legend(0.40, 1.3, col = 1, legend = rev(unique(GradTable[,'s'])),
         title = 'sel', pch = rev(seq(7, by = 1, length = 8)), bty = "n")
 dev.off()

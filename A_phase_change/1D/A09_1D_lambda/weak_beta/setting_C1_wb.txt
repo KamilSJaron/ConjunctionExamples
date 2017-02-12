@@ -1,0 +1,29 @@
+#################################################
+# TEMPLATE FILE OF PARAMETERS FOR THE SIMULATOR #
+#################################################
+# this file serves as setting for the program Conjunction
+# hosted by GitHub https://github.com/KamilSJaron/Conjunction
+# all parameters are well documented in wiki of the repository
+# https://github.com/KamilSJaron/Conjunction/wiki/setting
+
+# Numerical parameters
+
+LOCI = 200000
+NUMBERofCHROMOSOMES = 1
+LAMBDA = [0.9, 1.1, 1.3, 1.53]
+SELECTIONpressure = [0.03, 0.05, 0.1, 0.15, 0.2]            
+BETA = 0.5
+DEMEsize = 32 
+NUMBERofGENERATIONS = 500
+
+REPLICATES = 10
+
+#output parameters defining the output
+
+NUMBERofSAVES = 5
+NAMEofOUTPUTfile =
+TYPEofOUTPUTfile = blocks
+
+# World definition
+
+WORLDdefinition -quick = 'HybridZone' 1

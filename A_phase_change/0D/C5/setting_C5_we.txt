@@ -1,0 +1,30 @@
+####################################
+# 0D, 5 CHROMOSOMES, no epistasis #
+####################################
+# this file serves as setting for the program Conjunction
+# hosted by GitHub https://github.com/KamilSJaron/Conjunction
+# all parameters are well documented in wiki of the repository
+# https://github.com/KamilSJaron/Conjunction/wiki/setting
+
+# Numerical parameters
+
+LOCI = 40000
+NUMBERofCHROMOSOMES = 5
+LAMBDA = [1.53, 1.3, 1.1, 0.9]
+SELECTIONpressure = [0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8]
+BETA = [0.6, 0.4, 0.2]
+DEMEsize = 100
+NUMBERofGENERATIONS = 50
+
+REPLICATES = 5
+
+#output parameters defining the output
+
+NUMBERofSAVES = 1
+NAMEofOUTPUTfile =
+TYPEofOUTPUTfile = blocks
+DELAY = 0
+
+# World definition
+
+WORLDdefinition -quick = 'InfInf' 1
