@@ -1,14 +1,14 @@
 library(ConjunctionStats)
 
-sims <- append(ReadSummary('epistasis_in_0D.out'),
-               ReadSummary('epistasis_in_0D_weak_selection.out'))
-sims <- append(sims, ReadSummary('epistasis_in_0D_really_weak_selection.out'))
+sims <- append(ReadSummary('epistasis/epistasis_in_0D.out'),
+               ReadSummary('epistasis/epistasis_in_0D_weak_selection.out'))
+sims <- append(sims, ReadSummary('epistasis/epistasis_in_0D_really_weak_selection.out'))
 
-GradTable <- rbind(ReadSetting('epistasis_in_0D_weak_selection.txt'),
-                   ReadSetting('epistasis_in_0D_really_weak_selection.txt'))
+GradTable <- rbind(ReadSetting('epistasis/epistasis_in_0D_weak_selection.txt'),
+                   ReadSetting('epistasis/epistasis_in_0D_really_weak_selection.txt'))
 
 GradTable$n <- 1
-GradTable <- rbind(ReadSetting('epistasis_in_0D.txt'), GradTable)
+GradTable <- rbind(ReadSetting('epistasis/epistasis_in_0D.txt'), GradTable)
 
 getStat <- function(df, stat){return(df[,stat])}
 GradTable$JPj <- unlist(lapply(sims, getStat, 'Material'))

@@ -11,16 +11,16 @@
 LOCI = 20000
 NUMBERofCHROMOSOMES = 10
 LAMBDA = [1.53, 1.3, 1.1, 0.9]
-SELECTIONpressure = [0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8]
-BETA = [0.6, 0.4, 0.2]
+SELECTIONpressure = [0.65, 0.7, 0.75, 0.8]
+BETA = 1
 DEMEsize = 100
-NUMBERofGENERATIONS = 50
+NUMBERofGENERATIONS = 200
 
 REPLICATES = 5
 
 #output parameters defining the output
 
-NUMBERofSAVES = 1
+NUMBERofSAVES = 5
 NAMEofOUTPUTfile =
 TYPEofOUTPUTfile = blocks
 DELAY = 0
