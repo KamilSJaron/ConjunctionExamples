@@ -10,11 +10,19 @@ C20_OUT=$(patsubst %.txt, %.out, $(C20_SET))
 ALL_OUT=$(C1_OUT) $(C5_OUT) $(C10_OUT) $(C20_OUT)
 
 ## make plot : create output figure
-#.PHONY : plot
-# plot : ### fig to do
+.PHONY : plot
+plot : 0D_sss_C1_lambda0.9.png
+
+# pictures are made really terribly
+0D_sss_C1_lambda0.9.png : $(C1_OUT) $(C5_OUT) $(C10_OUT) $(C20_OUT)
+	Rscript effective_proportion_of_genome_epistasis.R
 
 .PHONY: sim_all
 sim_all : simC1 simC5 simC10 simC20
+
+#.PHONY: dl_all
+#sim_all :
+#	DL_SCRIPT
 
 include ../../scripts/template.mk
 

@@ -30,7 +30,7 @@ for(C in c(1,5,10,20)){
   GradTable_Ctemp <- GradTable[GradTable$C == C,]
   for(lambda in unique(GradTable_Ctemp$r)){
       GradTable_temp <- GradTable_Ctemp[GradTable_Ctemp$r == lambda,]
-      pdf(paste0('0D_sss_C',C,'_lambda',lambda,'.pdf'))
+      png(paste0('0D_sss_C',C,'_lambda',lambda,'.png'))
         PlotStat(GradTable_temp, 'sss', 's_norm', 'b', NA,
                  xlab = 'selection + N(0, 0.005)',
                  ylab = 's* / S ± sd', ylim = c(0,1.4), pal = pal_t, pch = 20,
