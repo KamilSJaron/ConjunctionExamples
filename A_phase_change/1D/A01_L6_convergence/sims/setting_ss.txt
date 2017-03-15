@@ -8,22 +8,22 @@
 
 # Numerical parameters
 
-LOCI = 1
+LOCI = 6
 NUMBERofCHROMOSOMES = 1
 LAMBDA = 1.53
-SELECTIONpressure = [0.1, 0.2, 0.3, 0.4, 0.5, 0.56,0.66,0.70,0.74,0.78,0.82,0.86,0.90, 0.95, 0.97, 0.99]
-BETA = 1
-DEMEsize = 32
+SELECTIONpressure = [0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 0.99]
+BETA = [1.3, 1.4, 1.5, 1.6, 1.7, 1.8]
+DEMEsize = 1024
 NUMBERofGENERATIONS = 500
 
 REPLICATES = 10
 
 #output parameters defining the output
 
-NUMBERofSAVES = 5                    # integer smaller than number of generations
+NUMBERofSAVES = 10
 NAMEofOUTPUTfile =
 TYPEofOUTPUTfile = blocks
-DELAY = 0                           # integer smaller than number of generations
+DELAY = 0
 
 # World definition
 
